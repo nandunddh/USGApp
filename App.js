@@ -16,11 +16,12 @@ import ProfileSideBar from './Components/ProfileSideBar'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import CurrentConferences from './Components/Screen/CurrentConferences'
 import Notification from './Components/Tabs/Notification'
+import AdminNotification from './Components/AdminScreens/AdminNotification'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
-const MyTabs = () => {
+function UserTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -28,21 +29,32 @@ const MyTabs = () => {
         component={HomeScreen}
         options={{
           headerTitle: null,
-          headerShown: false,
+          title: " ",
+          headerShadowVisible: false,
+          headerLeft: () => (profile()), headerStyle: {
+            backgroundColor: "#373a43",
+          },
+          headerStyle: {
+            backgroundColor: "#373a43"
+          }
         }}
       />
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
-          headerTitleAlign: 'center', headerShown: false,
+          headerTitleAlign: 'center',
+          // headerShown: false,
         }}
       />
       <Tab.Screen
         name="Notification"
         component={Notification}
         options={{
+          headerTitleAlign: "center",
+          headerShadowVisible: false
           // headerShown: false,
+
 
         }}
       />
@@ -51,23 +63,56 @@ const MyTabs = () => {
   )
 }
 
-const NoHeader = () => {
+function AdminTabs() {
   return (
     <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerTitle: null,
+          title: " ",
+          headerShadowVisible: false,
+          headerLeft: () => (profile()), headerStyle: {
+            backgroundColor: "#373a43",
+          },
+          headerStyle: {
+            backgroundColor: "#373a43"
+          }
+        }}
+      />
+      <Tab.Screen
+        name="Create Notifications"
+        component={AdminNotification}
+        options={{
+          headerTitleAlign: "center",
+          // headerShadowVisible: false,
+          title: "Notification",
+          headerTitle: "Create Notifications",
+          // headerShown: false,
+
+
+
+        }}
+      />
       <Tab.Screen
         name="Notification"
         component={Notification}
         options={{
-          headerShown: false,
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+          // headerShown: false,
+
 
         }}
       />
+      {/* <Tab.Screen name="Program" component={Program}/> */}
     </Tab.Navigator>
   )
 }
 const profile = () => {
   return (
-    <SafeAreaProvider style={{ backgroundColor: "#373a43", height: 90, paddingVertical: 20, marginLeft: -18, width: "auto", borderBottomColor: "#373a43 !important", shadowColor: "#fff", }}>
+    <SafeAreaProvider style={{ backgroundColor: "#373a43", height: 90, width: "auto", borderBottomColor: "#373a43 !important", }}>
       <View>
         <View style={{ flexDirection: "row", }}>
           <View>
@@ -85,7 +130,7 @@ const profile = () => {
 
 export default function App() {
   const [isLogin, setIsLogin] = useState(false)
-  const [showHeader, setshowHeader] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(true)
 
   return (
     <SafeAreaProvider>
@@ -113,26 +158,44 @@ export default function App() {
             </Stack.Navigator>
           </MyContext.Provider>
         ) : (
-            <Stack.Navigator >
+          <Stack.Navigator >
+            {isAdmin ?
               <Stack.Screen
                 name="Home1"
-                component={MyTabs}
+                component={AdminTabs}
                 options={{
-                  title: null, headerLeft: () => (profile), headerStyle: {
+                  title: null, headerLeft: () => (profile()), headerStyle: {
                     backgroundColor: "#fff",
                   },
                   // header: () => showHeader && <NoHeader />,
-                  // headerShadowVisible: false,
+                  headerShadowVisible: false,
+                  headerShown: false,
                 }}
               // options={{ title: null, headerShown: false}}
               />
-              <Stack.Screen name="Program" component={Program} />
-              <Stack.Screen name="About" component={About} />
-              <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
-                headerTitle: "October 2023 Conferences"
-              }} />
-              {/* <MyTabs /> */}
-            </Stack.Navigator>
+              :
+              <Stack.Screen
+                name="Home1"
+                component={UserTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              // options={{ title: null, headerShown: false}}
+              />
+            }
+            <Stack.Screen name="Program" component={Program} />
+            <Stack.Screen name="About" component={About} />
+            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
+              headerTitle: "October 2023 Conferences"
+            }} />
+            <Stack.Screen name="Notifications" component={Notification} />
+            {/* <MyTabs /> */}
+          </Stack.Navigator>
         )}
       </NavigationContainer>
     </SafeAreaProvider >
