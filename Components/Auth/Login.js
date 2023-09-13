@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, TextInput, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
+import { View, Text, Button, Image, TextInput, StyleSheet, Touchable, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 // import MyContext from '../MyContext'
 import {
@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
 
   useEffect(() => {
     handleSignInWithGoogle();
-    // console.log("Data = ", data);
+    // console.log("Data = ", response);
   }, [response, isLogin])
 
   async function handleSignInWithGoogle() {
@@ -97,24 +97,62 @@ const Login = ({ navigation }) => {
   const login = () => {
     setIsLogin(true)
   }
+  // const handleLogin = () => {
+  //   if ((email.length == 0) || (password.length == 0)) {
+  //     alert("Required Field Is Missing!!!");
+  //   } else {
+  //     var APIURL = "http://127.0.0.1:8000/login.php";
 
-  const handleLogin = () =>{
-    if(email === ""){
+  //     var headers = {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     };
+
+  //     var Data = {
+  //       Email: email,
+  //       Password: password
+  //     };
+
+  //     fetch(APIURL, {
+  //       method: 'POST',
+  //       headers: headers,
+  //       body: JSON.stringify(Data)
+  //     })
+  //       .then((Response) => Response.json())
+  //       .then((Response) => {
+  //         alert(Response[0].Message)
+  //         if (Response[0].Message == "Success") {
+  //           console.log("true")
+  //           login()
+  //           // navigation.navigate("HomeScreen");
+  //         }
+  //         console.log(Data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("ERROR FOUND" + error);
+  //       })
+  //   }
+
+
+  // }
+
+  const handleLogin = () => {
+    if (email === "") {
       alert("Type your email");
     }
-    if(password === ""){
+    if (password === "") {
       alert("Type your password");
     }
-    if(email === "nandu@test.com" && password === "12345"){
+    if (email === "nandu@test.com" && password === "12345") {
       // alert('Login Success!')
       login()
     }
-    else{
-      if(email !== "nandu@test.com"){
+    else {
+      if (email !== "nandu@test.com") {
         alert('Invalid email');
         email1.current.focus();
       }
-      else{
+      else {
         alert('Invalid password');
         password1.current.focus();
       }
@@ -124,11 +162,10 @@ const Login = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaProvider>
-      <View>
-
+    <ScrollView>
+      <View style={{ flex: 1 }}>
         {/* <View style={{paddingTop: insets.top, paddingHorizontal: 20 }}> */}
-        <View style={{ paddingHorizontal: 20 }}>
+        <View style={{ paddingHorizontal: 20, }}>
           <View style={{ alignItems: 'center' }}>
             <Image source={require('../../assets/logo.png')} />
           </View>
@@ -144,16 +181,16 @@ const Login = ({ navigation }) => {
             {/* <Text>{JSON.stringify(userInfo, null, 2)}</Text> */}
             <View style={styles.inputbox}>
               <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-              <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} defaultValue={email} onChangeText={email => setEmail(email)} ref={email1}/>
+              <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
 
             </View>
             <View style={styles.inputbox}>
-              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
-              <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword( password)} ref={password1} />
+              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
+              <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword(password)} ref={password1} />
               {hidePass ?
-                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
                 :
-                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
 
               }
 
@@ -172,7 +209,7 @@ const Login = ({ navigation }) => {
             </View>
           </View>
         </View>
-        <View>
+        <View style={{ marginBottom: 20, }}>
           <View style={styles.container}>
             <View style={styles.horizontalLine} />
             <Text style={styles.text}> or continue with </Text>
@@ -190,7 +227,7 @@ const Login = ({ navigation }) => {
             </View>
           </View>
           <View>
-            <Text style={{ textAlign: "center", fontSize: 15 }}> Don't have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
+            <Text style={{ textAlign: "center", fontSize: 15, }}> Don't have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
               navigation.navigate('Sign Up')
             }> Sign Up </Text></Text>
           </View>
@@ -203,8 +240,7 @@ const Login = ({ navigation }) => {
               /> */}
         </View>
       </View>
-    </SafeAreaProvider>
-
+    </ScrollView>
   )
 }
 
@@ -217,7 +253,8 @@ const styles = StyleSheet.create({
     borderColor: "#e1e1e3",
     flexDirection: "row",
     borderRadius: 20,
-    marginBottom: 20
+    marginBottom: 20,
+    flex: 1,
   },
   firsttext: {
     fontSize: 15,
@@ -228,16 +265,17 @@ const styles = StyleSheet.create({
   textinput: {
     paddingHorizontal: 10,
     paddingVertical: 13,
-    width: "70%"
+    // width: "55%"
+    flex: 6
   },
   forgetpassword: {
     color: "#ff6500",
     textAlign: "right",
-    marginVertical: 20
   },
   container: {
     flexDirection: 'row',
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 20,
   },
   horizontalLine: {
     flex: 1,

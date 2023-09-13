@@ -7,28 +7,40 @@ import { EvilIcons } from '@expo/vector-icons';
 const CurrentConferences = () => {
   const popular_conferences = [
     {
-      image: require("../../assets/popularimage.jpg"),
+      image: require("../../assets/dental.jpg"),
+      title: "INTERNATIONAL CONFERENCE ON \nDental Science & Research",
+      title1: 'DENTAL SCIENCE & RESEARCH',
+      name: "DSR-2023",
+      date: "OCTOBER 23-25, 2023",
+      venu: "VIRTUAL",
+      url: "https://dentistry-conference.com",
+    },
+    {
+      image: require("../../assets/ccm-banner.jpg"),
+      title: "3rd International Conference on \nCarbon Chemistry and Materials",
+      title1: 'Carbon Chemistry and Materials',
+      name: "CCM-2023",
+      date: "OCTOBER 23-27, 2023",
+      venu: "Paris, France(Hybrid)",
+      url: "https://carbon.unitedscientificgroup.org",
+    },
+    {
+      image: require("../../assets/ren-banner.jpg"),
+      title: "3rd International Conference on \nCarbon Chemistry and Materials",
+      title1: 'Renewable Energy Conference 2023',
+      name: "REN-2023",
+      date: "OCTOBER 23-25, 2023",
+      venu: "Paris, France",
+      url: "https://renewablemeeting.com/",
+    },
+    {
+      image: require("../../assets/sun-banner.jpg"),
       title: "INTERNATIONAL CONFERENCE ON \nNextGen Solar",
       title1: 'NextGen Solar',
       name: "SUN-2023",
       date: "OCTOBER 30-31, 2023",
       venu: "SAN FRANCISCO, CA",
       url: "https://solarenergymeet.com",
-    },
-    {
-      image: require("../../assets/popularimage.jpg"),
-    },
-    {
-      image: require("../../assets/popularimage.jpg"),
-    },
-    {
-      image: require("../../assets/popularimage.jpg"),
-    },
-    {
-      image: require("../../assets/popularimage.jpg"),
-    },
-    {
-      image: require("../../assets/popularimage.jpg"),
     },
   ]
   const HandleUrl = ({ item }) => {
@@ -37,15 +49,17 @@ const CurrentConferences = () => {
       Linking.openURL(url);
     }
     return (
-      <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, marginVertical: 10}}>
-        <Image source={item.image} style={{ borderRadius: 15, width: "auto" }} />
-        <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
-        <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 12 }}>
-          <Fontisto name="date" size={16} color="#f66b10" />
-          <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
-          <EvilIcons name="location" size={18} color="#f66b10" />
-          <Text style={{ fontSize: 12, fontWeight: "600" }}>{item.venu}</Text>
+      <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, marginVertical: 10, }}>
+        <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 230}} />
+        <View style={{ paddingHorizontal: 10, borderColor: "#000", flex: 1 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
+          <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 12 }}>
+            <Fontisto name="date" size={16} color="#f66b10" />
+            <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
+            <EvilIcons name="location" size={18} color="#f66b10" />
+            <Text style={{ fontSize: 12, fontWeight: "600" }}>{item.venu}</Text>
+          </View>
         </View>
         <View>
           <View style={{ marginVertical: 10, flexDirection: "row", justifyContent: "space-between", marginHorizontal: 10 }}>

@@ -2,21 +2,25 @@ import { Image, StyleSheet, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from './Components/HomeScreen'
 import SettingsScreen from './Components/SettingsScreen'
-import { DrawerActions, NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import Program from './Components/Program'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Settings from './Components/About'
 import About from './Components/About'
 import Login from './Components/Auth/Login'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import MyContext from './Components/MyContext'
 import SignUp from './Components/Auth/SignUp'
 import ResetPassword from './Components/Auth/ResetPassword'
 import ProfileSideBar from './Components/ProfileSideBar'
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import CurrentConferences from './Components/Screen/CurrentConferences'
 import Notification from './Components/Tabs/Notification'
 import AdminNotification from './Components/AdminScreens/AdminNotification'
+
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from "expo-constants";
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -128,9 +132,175 @@ const profile = () => {
   )
 }
 
+// Notifications start //
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+// Can use this function below or use Expo's Push Notification Tool from: https://expo.dev/notifications
+async function sendPushNotification(expoPushToken) {
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: 'Original Title',
+    body: 'And here is the body!',
+    data: { someData: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    });
+
+    console.log(token);
+  } else {
+    console.log(token);
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
+
+
+
 export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   const [isLogin, setIsLogin] = useState(false)
+  const [isNotification, setIsNotification] = useState(false)
+  const [notificationDesc, setNotificationDesc] = useState([{
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("./assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("./assets/favicon.png")
+  },])
+  const [time, setTime] = useState([])
   const [isAdmin, setIsAdmin] = useState(true)
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+  //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+  //     setNotification(notification);
+  //   });
+
+  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+  //     console.log(response);
+  //   });
+
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(notificationListener.current);
+  //     Notifications.removeNotificationSubscription(responseListener.current);
+  //   };
+  // }, []);
 
   return (
     <SafeAreaProvider>
@@ -143,6 +313,7 @@ export default function App() {
               <Stack.Screen
                 name="Sign in"
                 component={Login}
+                // component={SettingsScreen}
                 options={{ headerTitleAlign: "center", headerShadowVisible: false }}
               />
               <Stack.Screen
@@ -158,47 +329,63 @@ export default function App() {
             </Stack.Navigator>
           </MyContext.Provider>
         ) : (
-          <Stack.Navigator >
-            {isAdmin ?
-              <Stack.Screen
-                name="Home1"
-                component={AdminTabs}
-                options={{
-                  title: null, headerLeft: () => (profile()), headerStyle: {
-                    backgroundColor: "#fff",
-                  },
-                  // header: () => showHeader && <NoHeader />,
-                  headerShadowVisible: false,
-                  headerShown: false,
-                }}
-              // options={{ title: null, headerShown: false}}
-              />
-              :
-              <Stack.Screen
-                name="Home1"
-                component={UserTabs}
-                options={{
-                  title: null, headerLeft: () => (profile()), headerStyle: {
-                    backgroundColor: "#fff",
-                  },
-                  // header: () => showHeader && <NoHeader />,
-                  headerShadowVisible: false,
-                  headerShown: false,
-                }}
-              // options={{ title: null, headerShown: false}}
-              />
-            }
-            <Stack.Screen name="Program" component={Program} />
-            <Stack.Screen name="About" component={About} />
-            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
-              headerTitle: "October 2023 Conferences"
-            }} />
-            <Stack.Screen name="Notifications" component={Notification} />
-            {/* <MyTabs /> */}
-          </Stack.Navigator>
+          <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification }}>
+            <Stack.Navigator >
+              {isAdmin ?
+                <Stack.Screen
+                  name="Home1"
+                  component={AdminTabs}
+                  options={{
+                    title: null, headerLeft: () => (profile()), headerStyle: {
+                      backgroundColor: "#fff",
+                    },
+                    // header: () => showHeader && <NoHeader />,
+                    headerShadowVisible: false,
+                    headerShown: false,
+                  }}
+                // options={{ title: null, headerShown: false}}
+                />
+                :
+                <Stack.Screen
+                  name="Home1"
+                  component={UserTabs}
+                  options={{
+                    title: null, headerLeft: () => (profile()), headerStyle: {
+                      backgroundColor: "#fff",
+                    },
+                    // header: () => showHeader && <NoHeader />,
+                    headerShadowVisible: false,
+                    headerShown: false,
+                  }}
+                // options={{ title: null, headerShown: false}}
+                />
+              }
+              <Stack.Screen name="Program" component={Program} />
+              <Stack.Screen name="About" component={About} />
+              <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
+                headerTitle: "October 2023 Conferences"
+              }} />
+              <Stack.Screen name="Notifications" component={Notification} />
+              {/* <MyTabs /> */}
+            </Stack.Navigator>
+          </MyContext.Provider>
         )}
       </NavigationContainer>
     </SafeAreaProvider >
+    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+    //   <Text>Your expo push token: {expoPushToken}</Text>
+    //   <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    //     <Text>Title: {notification && notification.request.content.title} </Text>
+    //     <Text>Body: {notification && notification.request.content.body}</Text>
+    //     <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+    //   </View>
+    //   <Button
+    //     title="Press to Send Notification"
+    //     onPress={async () => {
+    //       await sendPushNotification(expoPushToken);
+    //     }}
+    //   />
+    // </View>
   )
 }
 

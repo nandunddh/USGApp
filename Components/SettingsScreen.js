@@ -1,13 +1,14 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
 
-const SettingsScreen = ({navigation}) => {
+const SettingsScreen = () => {
   return (
-    <View>
-      <Button
-        title="Go To About"
-        onPress={() => navigation.navigate('About')}
-      />
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "red" }}>
+      </View>
+      <View style={{flex: 2}}>
+        <Text>SettingsScreen</Text>
+      </View>
     </View>
   )
 }
