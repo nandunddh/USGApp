@@ -21,6 +21,8 @@ import AdminNotification from './Components/AdminScreens/AdminNotification'
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
+import PolymersScreen from './Components/Screen/PolymersScreen'
+import ConferencesList from './Components/Tabs/ConferencesList'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -54,6 +56,17 @@ function UserTabs() {
       <Tab.Screen
         name="Notification"
         component={Notification}
+        options={{
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+          // headerShown: false,
+
+
+        }}
+      />
+      <Tab.Screen
+        name="Events"
+        component={ConferencesList}
         options={{
           headerTitleAlign: "center",
           headerShadowVisible: false
@@ -331,7 +344,7 @@ export default function App() {
         ) : (
           <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification }}>
             <Stack.Navigator >
-              {isAdmin ?
+              {!isAdmin ?
                 <Stack.Screen
                   name="Home1"
                   component={AdminTabs}
@@ -366,26 +379,12 @@ export default function App() {
                 headerTitle: "October 2023 Conferences"
               }} />
               <Stack.Screen name="Notifications" component={Notification} />
-              {/* <MyTabs /> */}
+              <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
             </Stack.Navigator>
           </MyContext.Provider>
         )}
       </NavigationContainer>
     </SafeAreaProvider >
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-    //   <Text>Your expo push token: {expoPushToken}</Text>
-    //   <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-    //     <Text>Title: {notification && notification.request.content.title} </Text>
-    //     <Text>Body: {notification && notification.request.content.body}</Text>
-    //     <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-    //   </View>
-    //   <Button
-    //     title="Press to Send Notification"
-    //     onPress={async () => {
-    //       await sendPushNotification(expoPushToken);
-    //     }}
-    //   />
-    // </View>
   )
 }
 

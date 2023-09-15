@@ -51,10 +51,10 @@ const CurrentConferences = () => {
     return (
       <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, marginVertical: 10, }}>
         <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 230}} />
-        <View style={{ paddingHorizontal: 10, borderColor: "#000", flex: 1 }}>
+        <View style={{ paddingHorizontal: 10, borderColor: "#000", flex: 1, }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
           <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 12 }}>
+          <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 12 }}>
             <Fontisto name="date" size={16} color="#f66b10" />
             <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
             <EvilIcons name="location" size={18} color="#f66b10" />
@@ -101,6 +101,6 @@ export default CurrentConferences
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20
+    paddingVertical: 10
   }
 })
