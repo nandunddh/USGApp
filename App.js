@@ -23,6 +23,9 @@ import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
 import PolymersScreen from './Components/Screen/PolymersScreen'
 import ConferencesList from './Components/Tabs/ConferencesList'
+import ConferenceScreen from './Components/Screen/ConferenceScreen'
+import AboutConference from './Components/Screen/AboutConference'
+import PdfScreen from './Components/Screen/PdfScreen'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -296,7 +299,7 @@ export default function App() {
     image: require("./assets/favicon.png")
   },])
   const [time, setTime] = useState([])
-  const [isAdmin, setIsAdmin] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // useEffect(() => {
   //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -380,6 +383,11 @@ export default function App() {
               }} />
               <Stack.Screen name="Notifications" component={Notification} />
               <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
+              <Stack.Screen name="Pdf Screen" component={PdfScreen} />
+              <Stack.Screen name="About Conference" component={AboutConference} options={{
+                headerTitleAlign: "center",
+              }}/>
+              <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{headerShown: false}}/>
             </Stack.Navigator>
           </MyContext.Provider>
         )}

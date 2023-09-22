@@ -16,6 +16,7 @@ import { Zocial } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { SearchBar } from 'react-native-screens';
 import ConferencesList from "./Tabs/ConferencesList"
+import { notificationData, popular_conferences, upcomingConferencelist } from './Data/data';
 
 
 const HomeScreen = ({ navigation }) => {
@@ -30,45 +31,7 @@ const HomeScreen = ({ navigation }) => {
   const [Keynote, setKeynote] = useState([])
   const [Oral, setOral] = useState([])
   const [Sessions, setSessions] = useState([])
-  const popular_conferences = [
-    {
-      image: require("../assets/dental.jpg"),
-      title: "INTERNATIONAL CONFERENCE ON \nDental Science & Research",
-      title1: 'DENTAL SCIENCE & RESEARCH',
-      name: "DSR-2023",
-      date: "OCTOBER 23-25, 2023",
-      venu: "VIRTUAL",
-      url: "https://dentistry-conference.com",
-      screenname: "Polymers-2023"
-    },
-    {
-      image: require("../assets/ccm-banner.jpg"),
-      title: "3rd International Conference on \nCarbon Chemistry and Materials",
-      title1: 'Carbon Chemistry and Materials',
-      name: "CCM-2023",
-      date: "OCTOBER 23-27, 2023",
-      venu: "Paris, France(Hybrid)",
-      url: "https://carbon.unitedscientificgroup.org",
-    },
-    {
-      image: require("../assets/ren-banner.jpg"),
-      title: "3rd International Conference on \nCarbon Chemistry and Materials",
-      title1: 'Renewable Energy Conference 2023',
-      name: "REN-2023",
-      date: "OCTOBER 23-25, 2023",
-      venu: "Paris, France",
-      url: "https://renewablemeeting.com/",
-    },
-    {
-      image: require("../assets/sun-banner.jpg"),
-      title: "INTERNATIONAL CONFERENCE ON \nNextGen Solar",
-      title1: 'NextGen Solar',
-      name: "SUN-2023",
-      date: "OCTOBER 30-31, 2023",
-      venu: "SAN FRANCISCO, CA",
-      url: "https://solarenergymeet.com",
-    },
-  ]
+  const popular_conference = popular_conferences;
 
   useEffect(() => {
     // fetchData()
@@ -79,39 +42,52 @@ const HomeScreen = ({ navigation }) => {
       // const url = `${item.url}`;
       // Linking.openURL(url);
       const url = `${item.screenname}`;
-      navigation.navigate(url);
+      navigation.navigate(url, {
+        name: item.name,
+        title: item.title1,
+        date: item.date,
+        venu: item.venu,
+        url: item.url,
+        image: item.image,
+        about: item.about,
+        aboutshort: item.aboutShort,
+        hotelAddress: item.hotelAddress,
+        url: item.url,
+      });
     }
     return (
-      <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
-        <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 190 }} />
-        <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
-        <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
-        <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
-          <View style={{ flexDirection: "row", }}>
-            <Fontisto name="date" size={16} color="#f66b10" />
-            <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
-          </View>
-          <View style={{ flexDirection: "row", textAlign: "center" }}>
-            <EvilIcons name="location" size={18} color="#f66b10" />
-            <Text style={{ fontSize: 12, fontWeight: "600" }}>{item.venu}</Text>
-          </View>
-        </View>
-        <View>
-          <View style={{ marginVertical: 10, flexDirection: "row", justifyContent: "space-between", marginHorizontal: 10 }}>
-            {/* <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={handpleUrlPress}> */}
-            <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={handpleUrlPress}>
-              <Text style={{ color: "#fff", textAlign: "center" }}> Register Now </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
-              <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
-            </TouchableOpacity>
-            {/* <Button title='SIGN IN' color="#000" /> */}
+      <ScrollView>
+        <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
+          <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 190 }} />
+          <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
+          <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
+          <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
+            <View style={{ flexDirection: "row", }}>
+              <Fontisto name="date" size={16} color="#f66b10" />
+              <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
+            </View>
+            <View style={{ flexDirection: "row", textAlign: "center" }}>
+              <EvilIcons name="location" size={18} color="#f66b10" />
+              <Text style={{ fontSize: 12, fontWeight: "600" }}>{item.venu}</Text>
+            </View>
           </View>
           <View>
-            {/* <Text style={{ textAlign: "center" }}>Register Now</Text> */}
+            <View style={{ marginVertical: 10, flexDirection: "row", justifyContent: "space-between", marginHorizontal: 10 }}>
+              {/* <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={handpleUrlPress}> */}
+              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={handpleUrlPress}>
+                <Text style={{ color: "#fff", textAlign: "center" }}> Register Now </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
+                <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
+              </TouchableOpacity>
+              {/* <Button title='SIGN IN' color="#000" /> */}
+            </View>
+            <View>
+              {/* <Text style={{ textAlign: "center" }}>Register Now</Text> */}
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     )
   }
 
@@ -137,57 +113,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const UpComingConferences = () => {
-    const [notificationDesc, setNotificationDesc] = useState([
-      {
-        name: "POLYMERS-2023",
-        date: "Nov 01-03, 2023",
-        venu: "San Francisco, CA",
-        image: require("../assets/favicon.png"),
-        url: "https://polymers.unitedscientificgroup.org/"
-      },
-      {
-        name: "DRUG DISCOVERY 2023",
-        date: "Nov 01-03, 2023",
-        venu: "San Francisco, CA",
-        image: require("../assets/favicon.png"),
-        url: "https://drugdiscovery.unitedscientificgroup.org/"
-      },
-      {
-        name: "VACCINES R&D 2023",
-        date: "Nov 06-08, 2023",
-        venu: "Baltimore, MD",
-        image: require("../assets/favicon.png"),
-        url: "https://vaccines.unitedscientificgroup.org/"
-      },
-      {
-        name: "CANCER R&D 2023",
-        date: "Nov 13-15, 2023",
-        venu: "Boston, MA",
-        image: require("../assets/favicon.png"),
-        url: "https://cancerresearchconference.org/"
-      },
-      {
-        name: "BEI-2023",
-        date: "Nov 15-17, 2023",
-        venu: "Boston, MA",
-        image: require("../assets/favicon.png"),
-        url: "https://biomedinstrumentation.com/",
-      },
-      {
-        name: "FCT-2023",
-        date: "Nov 27-29, 2023",
-        venu: "Paris, France",
-        image: require("../assets/favicon.png"),
-        url: "https://foodchemconference.com/"
-      },
-      {
-        name: "OPL-2023",
-        date: "Dec 04-06, 2023",
-        venu: "Hiroshima, Japan",
-        image: require("../assets/favicon.png"),
-        url: "https://opticsconference.org/"
-      },
-    ])
+    const [notificationDesc, setNotificationDesc] = useState(notificationData)
     return (
       <ScrollView>
         <View>
@@ -222,57 +148,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const ConferencesLists = () => {
-    const SECTIONS = [
-      {
-        name: "POLYMERS-2023",
-        date: "Nov 01-03, 2023",
-        venu: "San Francisco, CA",
-        image: require("../assets/favicon.png"),
-        url: "https://polymers.unitedscientificgroup.org/"
-      },
-      {
-        name: "DRUG DISCOVERY 2023",
-        date: "Nov 01-03, 2023",
-        venu: "San Francisco, CA",
-        image: require("../assets/favicon.png"),
-        url: "https://drugdiscovery.unitedscientificgroup.org/"
-      },
-      {
-        name: "VACCINES R&D 2023",
-        date: "Nov 06-08, 2023",
-        venu: "Baltimore, MD",
-        image: require("../assets/favicon.png"),
-        url: "https://vaccines.unitedscientificgroup.org/"
-      },
-      {
-        name: "CANCER R&D 2023",
-        date: "Nov 13-15, 2023",
-        venu: "Boston, MA",
-        image: require("../assets/favicon.png"),
-        url: "https://cancerresearchconference.org/"
-      },
-      {
-        name: "BEI-2023",
-        date: "Nov 15-17, 2023",
-        venu: "Boston, MA",
-        image: require("../assets/favicon.png"),
-        url: "https://biomedinstrumentation.com/",
-      },
-      {
-        name: "FCT-2023",
-        date: "Nov 27-29, 2023",
-        venu: "Paris, France",
-        image: require("../assets/favicon.png"),
-        url: "https://foodchemconference.com/"
-      },
-      {
-        name: "OPL-2023",
-        date: "Dec 04-06, 2023",
-        venu: "Hiroshima, Japan",
-        image: require("../assets/favicon.png"),
-        url: "https://opticsconference.org/"
-      },
-    ];
+    const SECTIONS = upcomingConferencelist;
     <TabView
       navigationState={state}
       renderScene={renderScene}
@@ -335,67 +211,67 @@ const HomeScreen = ({ navigation }) => {
         value={search}
       /> */}
       <ScrollView>
-          {/* current conferences start */}
-          <View style={{ backgroundColor: "#373a43", paddingHorizontal: 25, flexDirection: "row", justifyContent: "space-between", height: 120, paddingTop: 10 }}>
-            <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>October 2023 Conferences</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("CurrentConferences")}>
-              <Text style={{ textAlign: "right", color: "red" }}> View all</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ marginTop: -60, flexDirection: "row", marginLeft: 10, marginBottom: 30, }}>
-            <FlatList
-              data={popular_conferences}
-              renderItem={({ item }) =>
-                <HandleUrl item={item} />
-              }
-              horizontal
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-          {/* current conferences end */}
-          {/* Up coming conferences start */}
+        {/* current conferences start */}
+        <View style={{ backgroundColor: "#373a43", paddingHorizontal: 25, flexDirection: "row", justifyContent: "space-between", height: 120, paddingTop: 10 }}>
+          <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>October 2023 Conferences</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("CurrentConferences")}>
+            <Text style={{ textAlign: "right", color: "red" }}> View all</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginTop: -60, flexDirection: "row", marginLeft: 10, marginBottom: 30, }}>
+          <FlatList
+            data={popular_conference}
+            renderItem={({ item }) =>
+              <HandleUrl item={item} />
+            }
+            horizontal
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        {/* current conferences end */}
+        {/* Up coming conferences start */}
+        <View>
           <View>
-            <View>
-              <Text style={styles.header2}>Coming Conferences</Text>
-            </View>
-            <View>
-              <UpComingConferences />
-            </View>
+            <Text style={styles.header2}>Coming Conferences</Text>
           </View>
-          {/* Up coming conferences end */}
-          {/* conferences 2024 start */}
           <View>
-            <View>
-              <Text style={styles.header2}>Conferences 2024</Text>
-            </View>
-            <View>
-              <ConferencesList />
-              {/* <List /> */}
-            </View>
+            <UpComingConferences />
           </View>
-          {/* conferences 2024 ends */}
-          {/* ABout */}
-          <ScrollView>
-            <View style={{ backgroundColor: "#fff", paddingVertical: 10, height: "100%" }}>
-              <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>About USG</Text>
-              <View style={{ alignItems: 'center' }}>
-                <Image source={require('../assets/logo.png')} />
-                <View style={{ marginHorizontal: 15, }}>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    <Text style={{ fontWeight: "bold" }}>United Scientific Group (USG)</Text> is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States.
-                    {"\n"}
-                  </Text>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    USG's primary goal is to establish scientific networking platforms through conferences. These platforms aim to bridge the gap between research and business, facilitating the translation of scientific discoveries and innovative ideas into practical solutions and products for the betterment of humanity.
-                    {"\n"}
-                  </Text>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    USG is governed by a board of directors comprising renowned scientists. Their dedication lies in supporting the scientific community by providing exceptional services in organizing scientific conferences and open access scientific publications.
-                  </Text>
-                </View>
+        </View>
+        {/* Up coming conferences end */}
+        {/* conferences 2024 start */}
+        <View>
+          <View>
+            <Text style={styles.header2}>Conferences 2024</Text>
+          </View>
+          <View>
+            <ConferencesList />
+            {/* <List /> */}
+          </View>
+        </View>
+        {/* conferences 2024 ends */}
+        {/* ABout */}
+        <ScrollView>
+          <View style={{ backgroundColor: "#fff", paddingVertical: 10, height: "100%" }}>
+            <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>About USG</Text>
+            <View style={{ alignItems: 'center' }}>
+              <Image source={require('../assets/logo.png')} />
+              <View style={{ marginHorizontal: 15, }}>
+                <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                  <Text style={{ fontWeight: "bold" }}>United Scientific Group (USG)</Text> is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States.
+                  {"\n"}
+                </Text>
+                <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                  USG's primary goal is to establish scientific networking platforms through conferences. These platforms aim to bridge the gap between research and business, facilitating the translation of scientific discoveries and innovative ideas into practical solutions and products for the betterment of humanity.
+                  {"\n"}
+                </Text>
+                <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                  USG is governed by a board of directors comprising renowned scientists. Their dedication lies in supporting the scientific community by providing exceptional services in organizing scientific conferences and open access scientific publications.
+                </Text>
               </View>
-              {/* <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "green", alignItems: "stretch", flexDirection: "row"}}>
+            </View>
+            {/* <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "green", alignItems: "stretch", flexDirection: "row"}}>
             <View style={{ flexDirection: "row", padding: 10 }}>
               <MaterialIcons name="keyboard-voice" size={24} color="white" />
               <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold", paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
@@ -407,103 +283,103 @@ const HomeScreen = ({ navigation }) => {
               <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold", justifyContent: "flex-end" }}>79</Text>
             </View>
           </View> */}
-              <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "#86bc42", }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialIcons name="keyboard-voice" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        CONFERENCES
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        By Our Experienced Team
-                      </Text>
-                    </View>
+            <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "#86bc42", }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                  <MaterialIcons name="keyboard-voice" size={45} color="white" />
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                      CONFERENCES
+                    </Text>
+                    <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                      By Our Experienced Team
+                    </Text>
+                  </View>
 
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>79</Text>
-                  </View>
                 </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialCommunityIcons name="account-outline" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        SPEAKERS
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        Keynotes, Featured Speakers
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>3547</Text>
-                  </View>
-                </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialCommunityIcons name="briefcase-outline" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        PARTNERS
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        We Provides All Industry Services
-                      </Text>
-                    </View>
-
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>56</Text>
-                  </View>
-                </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <SimpleLineIcons name="globe-alt" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        COUNTRIES
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        We are in All Continents
-                      </Text>
-                    </View>
-
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>75</Text>
-                  </View>
+                <View style={{ padding: 10, justifyContent: "center" }}>
+                  <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>79</Text>
                 </View>
               </View>
-              <View style={{ backgroundColor: "#373a43", borderTopLeftRadius: 40, borderTopEndRadius: 40, }}>
-                <View>
-                  <View style={{ borderTopWidth: 5, borderColor: "#fff", marginTop: 12, height: 1, marginHorizontal: 150, borderRadius: 50 }}>
-                    {/* <Text>-------------</Text> */}
+              <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                  <MaterialCommunityIcons name="account-outline" size={45} color="white" />
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                      SPEAKERS
+                    </Text>
+                    <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                      Keynotes, Featured Speakers
+                    </Text>
                   </View>
                 </View>
-                <View style={{ backgroundColor: "#373a43", flexDirection: "row", paddingVertical: 20, paddingHorizontal: 10, justifyContent: "space-evenly", borderTopLeftRadius: 40, borderTopEndRadius: 40, }}>
+                <View style={{ padding: 10, justifyContent: "center" }}>
+                  <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>3547</Text>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                  <MaterialCommunityIcons name="briefcase-outline" size={45} color="white" />
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                      PARTNERS
+                    </Text>
+                    <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                      We Provides All Industry Services
+                    </Text>
+                  </View>
 
-                  <View style={{ backgroundColor: "#f66b10", borderRadius: 60, paddingHorizontal: 5 }}>
-                    <Zocial name="call" size={45} color="white" onPress={() => { Linking.openURL(`tel:+1-469-854-2280/81`) }} />
+                </View>
+                <View style={{ padding: 10, justifyContent: "center" }}>
+                  <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>56</Text>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                  <SimpleLineIcons name="globe-alt" size={45} color="white" />
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                      COUNTRIES
+                    </Text>
+                    <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                      We are in All Continents
+                    </Text>
                   </View>
-                  <View style={{ backgroundColor: "#fbbf47", borderRadius: 60, padding: 5 }}>
-                    <MaterialCommunityIcons name="email-outline" size={48} color="white" onPress={() => { Linking.openURL(`mailto:contact@unitedscientificgroup.net`) }} />
-                  </View>
-                  <View style={{ backgroundColor: "#3f82f7", borderRadius: 60, padding: 5 }}>
-                    {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
-                    <FontAwesome5 name="globe" size={45} color="white" onPress={() => { Linking.openURL("https://unitedscientificgroup.org") }} />
-                  </View>
+
+                </View>
+                <View style={{ padding: 10, justifyContent: "center" }}>
+                  <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>75</Text>
                 </View>
               </View>
             </View>
-          </ScrollView>
+            <View style={{ backgroundColor: "#373a43", borderTopLeftRadius: 80, borderTopEndRadius: 80, }}>
+              <View>
+                <View style={{ borderTopWidth: 5, borderColor: "#fff", marginTop: 12, height: 1, marginHorizontal: 150, borderRadius: 50 }}>
+                  {/* <Text>-------------</Text> */}
+                </View>
+              </View>
+              <View style={{ backgroundColor: "#373a43", flexDirection: "row", paddingVertical: 20, paddingHorizontal: 10, justifyContent: "space-evenly", borderTopLeftRadius: 60, borderTopEndRadius: 60, }}>
+
+                <View style={{ backgroundColor: "#f66b10", borderRadius: 60, paddingHorizontal: 5 }}>
+                  <Zocial name="call" size={45} color="white" onPress={() => { Linking.openURL(`tel:+1-469-854-2280/81`) }} />
+                </View>
+                <View style={{ backgroundColor: "#fbbf47", borderRadius: 60, padding: 5 }}>
+                  <MaterialCommunityIcons name="email-outline" size={48} color="white" onPress={() => { Linking.openURL(`mailto:contact@unitedscientificgroup.net`) }} />
+                </View>
+                <View style={{ backgroundColor: "#3f82f7", borderRadius: 60, padding: 5 }}>
+                  {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
+                  <FontAwesome5 name="globe" size={45} color="white" onPress={() => { Linking.openURL("https://unitedscientificgroup.org") }} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
 
       </ScrollView>
     </SafeAreaView>
