@@ -19,7 +19,7 @@ const SignUp = ({ navigation }) => {
     <SafeAreaProvider>
       <ScrollView>
         <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
-          <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
+          <Text style={{ marginVertical: 10 }}>Create account and enjoy all services</Text>
           <View style={styles.inputbox}>
             <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
             <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} />

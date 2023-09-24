@@ -12,11 +12,13 @@ import { ScrollView } from 'react-native';
 import MapView from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking } from 'react-native';
+import { popular_conferences } from '../Data/data';
 
 
 const ConferenceScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
-  console.log("Screen === ", route);
+  const [data, setData] = useState(popular_conferences);
+  console.log("Screen === ", popular_conferences);
   const [name, setName] = useState(route.params.name);
   const [title, setTitle] = useState(route.params.title);
   const [image, setImage] = useState(route.params.image);
@@ -31,6 +33,7 @@ const ConferenceScreen = ({ route, navigation }) => {
   return (
     <SafeAreaProvider style={{ paddingTop: insets.top }}>
       <ScrollView>
+        {/* {popular_conferences && popular_conferences.popular_conferences} */}
         <View>
           <View>
             <Image source={image} style={Styles.image} />
@@ -86,13 +89,13 @@ const ConferenceScreen = ({ route, navigation }) => {
               </View>
               <View style={{ height: 250, paddingBottom: 30 }}>
                 <Text style={{ lineHeight: 22, marginVertical: 10, fontSize: 16, fontWeight: "400" }}>{hotelAddress}</Text>
-                <MapView style={Styles.map}
+                {/* <MapView style={Styles.map}
                   initialRegion={{
                     latitude: 42.34616716969697,
                     longitude: -71.25787434479032,
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
-                  }} />
+                  }} /> */}
               </View>
             </View>
           </View>
@@ -142,7 +145,7 @@ export default ConferenceScreen
 const Styles = StyleSheet.create({
   image: {
     width: "auto",
-    height: 270,
+    height: 220,
   },
   heading: {
     fontSize: 25,
