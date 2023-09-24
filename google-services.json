@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "444587957400",
+    "project_id": "usgapp-396414",
+    "storage_bucket": "usgapp-396414.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444587957400:android:27b6fb9fc6d8e48e5cc4ed",
+        "android_client_info": {
+          "package_name": "com.anonymous.USG"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444587957400-6sd20fm24upuvq7b0a2hegk2ur2b9e5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMU-O8S2IIsoFmvgLvIHVYcOmMuzDegOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444587957400-6sd20fm24upuvq7b0a2hegk2ur2b9e5l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
