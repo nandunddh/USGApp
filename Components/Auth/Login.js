@@ -1,5 +1,6 @@
 import { View, Text, Button, Image, TextInput, StyleSheet, Touchable, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import * as SecureStore from 'expo-secure-store';
 // import MyContext from '../MyContext'
 import {
   SafeAreaProvider,
@@ -33,7 +34,7 @@ const Login = ({ navigation }) => {
   //   email: "",
   //   password: "",
   // });
-  const { isLogin, setIsLogin } = useContext(MyContext)
+  const { isLogin, setIsLogin, setIsAdmin, isAdmin } = useContext(MyContext)
 
   // const handleChange = (event = {}) => {
   //   const name = event.target && event.target.name;
@@ -96,6 +97,9 @@ const Login = ({ navigation }) => {
 
   const login = () => {
     setIsLogin(true)
+    if (email === "nandu@admin.com" && password === "admin-12345") {
+      setIsAdmin(true)
+    }
   }
   // const handleLogin = () => {
   //   if ((email.length == 0) || (password.length == 0)) {
@@ -135,6 +139,18 @@ const Login = ({ navigation }) => {
 
 
   // }
+  // Function to store credentials
+  const storeCredentials = async () => {
+    try {
+      await SecureStore.setItemAsync('email', email);
+      await SecureStore.setItemAsync('password', password);
+      login()
+      console.log('Credentials stored successfully.');
+    } catch (error) {
+      console.error('Error storing credentials:', error);
+    }
+  }
+
 
   const handleLogin = () => {
     if (email === "") {
@@ -143,12 +159,13 @@ const Login = ({ navigation }) => {
     if (password === "") {
       alert("Type your password");
     }
-    if (email === "nandu@test.com" && password === "12345") {
+    if (email === "nandu@test.com" && password === "12345" || email === "nandu@admin.com" && password === "admin-12345") {
       // alert('Login Success!')
-      login()
+      // login()
+      storeCredentials()
     }
     else {
-      if (email !== "nandu@test.com") {
+      if (email !== "nandu@test.com" || email !== "nandu@admin.com") {
         alert('Invalid email');
         email1.current.focus();
       }

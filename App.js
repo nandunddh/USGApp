@@ -19,6 +19,7 @@ import Notification from './Components/Tabs/Notification'
 import AdminNotification from './Components/AdminScreens/AdminNotification'
 
 import * as Device from 'expo-device';
+import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
 import PolymersScreen from './Components/Screen/PolymersScreen'
@@ -26,6 +27,7 @@ import ConferencesList from './Components/Tabs/ConferencesList'
 import ConferenceScreen from './Components/Screen/ConferenceScreen'
 import AboutConference from './Components/Screen/AboutConference'
 import PdfScreen from './Components/Screen/PdfScreen'
+import Logout from './Components/Auth/Logout'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -78,6 +80,17 @@ function UserTabs() {
 
         }}
       />
+      <Tab.Screen
+        name="LogOut"
+        component={Logout}
+        options={{
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+          // headerShown: false,
+
+
+        }}
+      />
       {/* <Tab.Screen name="Program" component={Program}/> */}
     </Tab.Navigator>
   )
@@ -118,6 +131,17 @@ function AdminTabs() {
       <Tab.Screen
         name="Notification"
         component={Notification}
+        options={{
+          headerTitleAlign: "center",
+          headerShadowVisible: false
+          // headerShown: false,
+
+
+        }}
+      />
+      <Tab.Screen
+        name="LogOut"
+        component={Logout}
         options={{
           headerTitleAlign: "center",
           headerShadowVisible: false
@@ -222,7 +246,9 @@ export default function App() {
   const responseListener = useRef();
 
   const [isLogin, setIsLogin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
+  const [storedCredentials, setStoredCredentials] = useState(null);
   const [notificationDesc, setNotificationDesc] = useState([{
     name: "NextGen Solar(SUN-2023)",
     text: "Hello notification test!!!",
@@ -299,7 +325,32 @@ export default function App() {
     image: require("./assets/favicon.png")
   },])
   const [time, setTime] = useState([])
-  const [isAdmin, setIsAdmin] = useState(false)
+
+  const getStoredCredentials = async() => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync('email');
+      const storedPassword = await SecureStore.getItemAsync('password');
+      if (storedEmail && storedPassword) {
+        setStoredCredentials({ email: storedEmail, password: storedPassword });
+        setIsLogin(true);
+        if (storedEmail === "nandu@admin.com" && storedPassword === "admin-12345") {
+          setIsAdmin(true);
+        }
+        console.log('Stored Credentials:', { email: storedEmail, password: storedPassword });
+      } else {
+        console.log('No credentials found.');
+      }
+    } catch (error) {
+      console.error('Error retrieving credentials:', error);
+    }
+  }
+
+  useEffect(() => {
+    console.log("isLogin", isLogin);
+    getStoredCredentials()
+  }, [isLogin, isAdmin, storedCredentials])
+
+
 
   // useEffect(() => {
   //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -321,8 +372,8 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {isLogin ? (
-          <MyContext.Provider value={{ isLogin, setIsLogin }}>
+        {!isLogin ? (
+          <MyContext.Provider value={{ isLogin, setIsLogin, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials }}>
             <Stack.Navigator screenOptions={{
               contentStyle: { backgroundColor: "#fff" }
             }}>
@@ -345,9 +396,9 @@ export default function App() {
             </Stack.Navigator>
           </MyContext.Provider>
         ) : (
-          <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification }}>
+          <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}>
             <Stack.Navigator >
-              {!isAdmin ?
+              {isAdmin ?
                 <Stack.Screen
                   name="Home1"
                   component={AdminTabs}
@@ -386,8 +437,8 @@ export default function App() {
               <Stack.Screen name="Pdf Screen" component={PdfScreen} />
               <Stack.Screen name="About Conference" component={AboutConference} options={{
                 headerTitleAlign: "center",
-              }}/>
-              <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{headerShown: false}}/>
+              }} />
+              <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
           </MyContext.Provider>
         )}
