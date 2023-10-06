@@ -21,7 +21,7 @@ export const popular_conferences = [
     date: "OCTOBER 23-27, 2023",
     venu: "Paris, France(Hybrid)",
     url: "https://carbon.unitedscientificgroup.org",
-    screenname: "ConferenceScreen", 
+    screenname: "ConferenceScreen",
     about: "United Scientific Group (USG) is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States.\nUSG's primary goal is to establish scientific networking platforms through conferences. These platforms aim to bridge the gap between research and business, facilitating the translation of scientific discoveries and innovative ideas into practical solutions and products for the betterment of humanity.\nUSG is governed by a board of directors comprising renowned scientists. Their dedication lies in supporting the scientific community by providing exceptional services in organizing scientific conferences and open access scientific publications.",
     aboutShort: "United Scientific Group (USG) is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States."
   },
@@ -154,3 +154,79 @@ export const upcomingConferencelist = [
     url: "https://opticsconference.org/"
   },
 ];
+
+const notificationDes = [{
+  name: "NextGen Solar(SUN-2023)",
+  text: "Hello notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "Notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "FCT-2023",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "NextGen Solar(SUN-2023)",
+  text: "Hello notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "Notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "FCT-2023",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "NextGen Solar(SUN-2023)",
+  text: "Hello notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "Notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "FCT-2023",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "NextGen Solar(SUN-2023)",
+  text: "Hello notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "Notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "FCT-2023",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "NextGen Solar(SUN-2023)",
+  text: "Hello notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "Notification test!!!",
+  image: require("../../assets/favicon.png")
+},
+{
+  name: "FCT-2023",
+  text: "FCT-2023",
+  image: require("../../assets/favicon.png")
+},]

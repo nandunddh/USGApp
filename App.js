@@ -28,7 +28,8 @@ import ConferenceScreen from './Components/Screen/ConferenceScreen'
 import AboutConference from './Components/Screen/AboutConference'
 import PdfScreen from './Components/Screen/PdfScreen'
 import Logout from './Components/Auth/Logout'
-
+import { notificationDes } from './Components/Data/data'
+import Context from './Components/context'
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
@@ -36,7 +37,7 @@ function UserTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
           headerTitle: null,
@@ -100,7 +101,7 @@ function AdminTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="HomeScreen"
         component={HomeScreen}
         options={{
           headerTitle: null,
@@ -249,94 +250,21 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   const [storedCredentials, setStoredCredentials] = useState(null);
-  const [notificationDesc, setNotificationDesc] = useState([{
-    name: "NextGen Solar(SUN-2023)",
-    text: "Hello notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "Notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "FCT-2023",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "NextGen Solar(SUN-2023)",
-    text: "Hello notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "Notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "FCT-2023",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "NextGen Solar(SUN-2023)",
-    text: "Hello notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "Notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "FCT-2023",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "NextGen Solar(SUN-2023)",
-    text: "Hello notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "Notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "FCT-2023",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "NextGen Solar(SUN-2023)",
-    text: "Hello notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "Notification test!!!",
-    image: require("./assets/favicon.png")
-  },
-  {
-    name: "FCT-2023",
-    text: "FCT-2023",
-    image: require("./assets/favicon.png")
-  },])
+  const [notificationDesc, setNotificationDesc] = useState(notificationDes)
   const [time, setTime] = useState([])
 
-  const getStoredCredentials = async() => {
+  const getStoredCredentials = async () => {
     try {
       const storedEmail = await SecureStore.getItemAsync('email');
       const storedPassword = await SecureStore.getItemAsync('password');
-      if (storedEmail && storedPassword) {
-        setStoredCredentials({ email: storedEmail, password: storedPassword });
+      const storedisAdmin = await SecureStore.getItemAsync('isAdmin');
+      if (storedEmail && storedPassword && storedisAdmin) {
+        setStoredCredentials({ email: storedEmail, password: storedPassword, isAdmin: storedisAdmin });
         setIsLogin(true);
-        if (storedEmail === "nandu@admin.com" && storedPassword === "admin-12345") {
+        if (isAdmin === "true") {
           setIsAdmin(true);
         }
-        console.log('Stored Credentials:', { email: storedEmail, password: storedPassword });
+        console.log('Stored Credentials:', { email: storedEmail, password: storedPassword, isAdmin: isAdmin });
       } else {
         console.log('No credentials found.');
       }
@@ -372,6 +300,40 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
+        <Context>
+          {/* <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}> */}
+          <Stack.Navigator >
+
+            <Stack.Screen
+              name="UserTab"
+              component={UserTabs}
+              options={{
+                title: null, headerLeft: () => (profile()), headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                // header: () => showHeader && <NoHeader />,
+                headerShadowVisible: false,
+                headerShown: false,
+              }}
+            // options={{ title: null, headerShown: false}}
+            />
+            <Stack.Screen name="Program" component={Program} />
+            <Stack.Screen name="About" component={About} />
+            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
+              headerTitle: "October 2023 Conferences"
+            }} />
+            <Stack.Screen name="Notifications" component={Notification} />
+            <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
+            <Stack.Screen name="Pdf Screen" component={PdfScreen} />
+            <Stack.Screen name="About Conference" component={AboutConference} options={{
+              headerTitleAlign: "center",
+            }} />
+            <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+          {/* </MyContext.Provider> */}
+        </Context>
+      </NavigationContainer>
+      {/* <NavigationContainer>
         {!isLogin ? (
           <MyContext.Provider value={{ isLogin, setIsLogin, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials }}>
             <Stack.Navigator screenOptions={{
@@ -400,7 +362,7 @@ export default function App() {
             <Stack.Navigator >
               {isAdmin ?
                 <Stack.Screen
-                  name="Home1"
+                  name="AdminTab"
                   component={AdminTabs}
                   options={{
                     title: null, headerLeft: () => (profile()), headerStyle: {
@@ -414,7 +376,7 @@ export default function App() {
                 />
                 :
                 <Stack.Screen
-                  name="Home1"
+                  name="UserTab"
                   component={UserTabs}
                   options={{
                     title: null, headerLeft: () => (profile()), headerStyle: {
@@ -442,7 +404,7 @@ export default function App() {
             </Stack.Navigator>
           </MyContext.Provider>
         )}
-      </NavigationContainer>
+      </NavigationContainer> */}
     </SafeAreaProvider >
   )
 }

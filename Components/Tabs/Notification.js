@@ -3,16 +3,16 @@ import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import MyContext from '../MyContext';
 
-const Notification = ({route}) => {
+const Notification = ({ route }) => {
   useEffect(() => {
-console.log("notificationDesc", notificationDesc)
-  }, [ notificationDesc]);
-  
-  const {isNotification, setIsNotification} = useContext(MyContext);
+    console.log("notificationDesc", notificationDesc)
+  }, [notificationDesc]);
+
+  const { isNotification, setIsNotification } = useContext(MyContext);
   // console.log("first", route.params.description)
   // const [notificationData, setNotificationData] = useState(route.params.description);
-  const {notificationDesc, setNotificationDesc, time, setTime} = useContext(MyContext);
-  
+  const { notificationDesc, setNotificationDesc, time, setTime } = useContext(MyContext);
+
   // const [notificationDesc, setNotificationDesc] = useState([
   //   {
   //     name: "NextGen Solar(SUN-2023)",
@@ -95,23 +95,24 @@ console.log("notificationDesc", notificationDesc)
       {isNotification ?
         <ScrollView>
           <View>
-            {notificationDesc && notificationDesc.map((notificationDesc, index) => {
-              return (
-                <View style={styles.notificationcontainer} key={index}>
-                  <View style={{ width: "20%", }}>
-                    <Image source={notificationDesc.image} />
+            {notificationDesc && notificationDesc.slice(0)
+              .reverse().map((notificationDesc, index) => {
+                return (
+                  <View style={styles.notificationcontainer} key={index - 1}>
+                    <View style={{ width: "20%", }}>
+                      <Image source={notificationDesc.image} />
+                    </View>
+                    <View style={{ width: "60%", }}>
+                      <Text style={{ fontWeight: "600", fontSize: 17 }}>{notificationDesc.name} {"\n"}<Text style={{ paddingLeft: 10, fontWeight: "normal", fontSize: 15 }}>{notificationDesc.text}</Text>
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%", paddingHorizontal: 1 }}>
+                      {/* <Text>10 53 pm</Text> */}
+                      <Text>{notificationDesc.time}</Text>
+                    </View>
                   </View>
-                  <View style={{ width: "60%", }}>
-                    <Text style={{ fontWeight: "600", fontSize: 17 }}>{notificationDesc.name} {"\n"}<Text style={{ paddingLeft: 10, fontWeight: "normal", fontSize: 15 }}>{notificationDesc.text}</Text>
-                    </Text>
-                  </View>
-                  <View style={{ width: "20%", paddingHorizontal: 1 }}>
-                    {/* <Text>10 53 pm</Text> */}
-                    <Text>{notificationDesc.time}</Text>
-                  </View>
-                </View>
-              )
-            })}
+                )
+              })}
           </View>
         </ScrollView>
         :
