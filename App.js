@@ -1,3 +1,4 @@
+
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from './Components/HomeScreen'
@@ -8,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Settings from './Components/About'
 import About from './Components/About'
 import Login from './Components/Auth/Login'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import MyContext from './Components/MyContext'
 import SignUp from './Components/Auth/SignUp'
 import ResetPassword from './Components/Auth/ResetPassword'
@@ -17,6 +18,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import CurrentConferences from './Components/Screen/CurrentConferences'
 import Notification from './Components/Tabs/Notification'
 import AdminNotification from './Components/AdminScreens/AdminNotification'
+
+// import Platform from '../node_modules'
 
 import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store';
@@ -28,8 +31,11 @@ import ConferenceScreen from './Components/Screen/ConferenceScreen'
 import AboutConference from './Components/Screen/AboutConference'
 import PdfScreen from './Components/Screen/PdfScreen'
 import Logout from './Components/Auth/Logout'
-import { notificationDes } from './Components/Data/data'
-import Context from './Components/context'
+import { nfData, notificationDes } from './Components/Data/data'
+import Context, { Message_data } from './Components/context'
+import AddConference from './Components/AdminScreens/AddConference'
+import UploadData from './Components/AdminScreens/UploadData'
+import UploadImage from './Components/AdminScreens/UploadData'
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
@@ -59,13 +65,27 @@ function UserTabs() {
           // headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Notification"
         component={Notification}
         options={{
           headerTitleAlign: "center",
           headerShadowVisible: false
           // headerShown: false,
+
+
+        }}
+      /> */}
+      <Tab.Screen
+        name="Image"
+        component={UploadImage}
+        options={{
+          headerTitleAlign: "center",
+          // headerShadowVisible: false,
+          title: "Notification",
+          headerTitle: "Create Notifications",
+          // headerShown: false,
+
 
 
         }}
@@ -116,6 +136,20 @@ function AdminTabs() {
         }}
       />
       <Tab.Screen
+        name="Image"
+        component={UploadData}
+        options={{
+          headerTitleAlign: "center",
+          // headerShadowVisible: false,
+          title: "Notification",
+          headerTitle: "Create Notifications",
+          // headerShown: false,
+
+
+
+        }}
+      />
+      {/* <Tab.Screen
         name="Create Notifications"
         component={AdminNotification}
         options={{
@@ -129,6 +163,20 @@ function AdminTabs() {
 
         }}
       />
+      <Tab.Screen
+        name="Create Conference"
+        component={AddConference}
+        options={{
+          headerTitleAlign: "center",
+          // headerShadowVisible: false,
+          title: "Create Conference",
+          headerTitle: "Create Conference",
+          // headerShown: false,
+
+
+
+        }}
+      /> */}
       <Tab.Screen
         name="Notification"
         component={Notification}
@@ -246,11 +294,13 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  // const {isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin} = useContext(Message_data)
+
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   const [storedCredentials, setStoredCredentials] = useState(null);
-  const [notificationDesc, setNotificationDesc] = useState(notificationDes)
+  const [notificationDesc, setNotificationDesc] = useState(nfData)
   const [time, setTime] = useState([])
 
   const getStoredCredentials = async () => {
@@ -264,7 +314,7 @@ export default function App() {
         if (isAdmin === "true") {
           setIsAdmin(true);
         }
-        console.log('Stored Credentials:', { email: storedEmail, password: storedPassword, isAdmin: isAdmin });
+        console.log('Stored Credentials from app.js:', { email: storedEmail, password: storedPassword, isAdmin: storedisAdmin });
       } else {
         console.log('No credentials found.');
       }
@@ -275,6 +325,7 @@ export default function App() {
 
   useEffect(() => {
     console.log("isLogin", isLogin);
+    console.log("isAdmin", isAdmin);
     getStoredCredentials()
   }, [isLogin, isAdmin, storedCredentials])
 
@@ -299,42 +350,11 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      {/*  */}
       <NavigationContainer>
-        <Context>
-          {/* <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}> */}
-          <Stack.Navigator >
-
-            <Stack.Screen
-              name="UserTab"
-              component={UserTabs}
-              options={{
-                title: null, headerLeft: () => (profile()), headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                // header: () => showHeader && <NoHeader />,
-                headerShadowVisible: false,
-                headerShown: false,
-              }}
-            // options={{ title: null, headerShown: false}}
-            />
-            <Stack.Screen name="Program" component={Program} />
-            <Stack.Screen name="About" component={About} />
-            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
-              headerTitle: "October 2023 Conferences"
-            }} />
-            <Stack.Screen name="Notifications" component={Notification} />
-            <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
-            <Stack.Screen name="Pdf Screen" component={PdfScreen} />
-            <Stack.Screen name="About Conference" component={AboutConference} options={{
-              headerTitleAlign: "center",
-            }} />
-            <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
-          </Stack.Navigator>
-          {/* </MyContext.Provider> */}
-        </Context>
-      </NavigationContainer>
-      {/* <NavigationContainer>
         {!isLogin ? (
+          // <Context>
+
           <MyContext.Provider value={{ isLogin, setIsLogin, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials }}>
             <Stack.Navigator screenOptions={{
               contentStyle: { backgroundColor: "#fff" }
@@ -356,8 +376,12 @@ export default function App() {
                 options={{ headerTitleAlign: "center", headerShadowVisible: false }}
               />
             </Stack.Navigator>
+            {/* </Context> */}
           </MyContext.Provider>
+
         ) : (
+          // <Context>
+
           <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}>
             <Stack.Navigator >
               {isAdmin ?
@@ -401,10 +425,29 @@ export default function App() {
                 headerTitleAlign: "center",
               }} />
               <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
+              {/* <Stack.Screen
+                name="Sign in"
+                component={Login}
+                // component={SettingsScreen}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+              />
+              <Stack.Screen
+                name="Sign Up"
+                component={SignUp}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+              />
+              <Stack.Screen
+                name="Reset Password"
+                component={ResetPassword}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+              /> */}
             </Stack.Navigator>
+            {/* </Context> */}
           </MyContext.Provider>
-        )}
-      </NavigationContainer> */}
+
+        )
+        }
+      </NavigationContainer >
     </SafeAreaProvider >
   )
 }

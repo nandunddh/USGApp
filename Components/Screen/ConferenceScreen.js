@@ -9,7 +9,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native';
-import MapView from 'react-native-maps';
+// import MapView from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking } from 'react-native';
 
@@ -86,13 +86,13 @@ const ConferenceScreen = ({ route, navigation }) => {
               </View>
               <View style={{ height: 250, paddingBottom: 30 }}>
                 <Text style={{ lineHeight: 22, marginVertical: 10, fontSize: 16, fontWeight: "400" }}>{hotelAddress}</Text>
-                <MapView style={Styles.map}
+                {/* <MapView style={Styles.map}
                   initialRegion={{
                     latitude: 42.34616716969697,
                     longitude: -71.25787434479032,
                     latitudeDelta: 0.0,
                     longitudeDelta: 0.08,
-                  }} />
+                  }} /> */}
               </View>
             </View>
           </View>

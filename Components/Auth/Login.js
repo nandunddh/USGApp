@@ -19,6 +19,7 @@ import { Fontisto } from '@expo/vector-icons';
 import MyContext from '../MyContext';
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
+import { Message_data } from '../context';
 
 webBrowser.maybeCompleteAuthSession()
 
@@ -35,7 +36,7 @@ const Login = ({ navigation }) => {
   //   email: "",
   //   password: "",
   // });
-  const { isLogin, setIsLogin, setIsAdmin, isAdmin } = useContext(MyContext)
+  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials } = useContext(MyContext)
 
   // const handleChange = (event = {}) => {
   //   const name = event.target && event.target.name;
@@ -56,10 +57,10 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     handleSignInWithGoogle();
     // console.log("Data = ", response);
-    if(email !== ""){
-      handleLogin()
-    }
-    // console.log(email)
+    // if(email !== ""){
+    //   handleLogin()
+    // }
+    console.log("isLogin from login === ", isAdmin)
   }, [response, isLogin, isAdmin, email])
 
   async function handleSignInWithGoogle() {
@@ -144,15 +145,39 @@ const Login = ({ navigation }) => {
 
 
   // }
+
+  const getStoredCredentials = async () => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync('email');
+      const storedPassword = await SecureStore.getItemAsync('password');
+      const storedisAdmin = await SecureStore.getItemAsync('isAdmin');
+      if (storedEmail && storedPassword && storedisAdmin) {
+        setStoredCredentials({ email: storedEmail, password: storedPassword, isAdmin: storedisAdmin });
+        setIsLogin(true);
+        if (storedisAdmin === "true") {
+          setIsAdmin(true);
+        }
+        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword, isAdmin: isAdmin });
+      } else {
+        console.log('No credentials found.');
+      }
+    } catch (error) {
+      console.error('Error retrieving credentials:', error);
+    }
+  }
   // Function to store credentials
   const storeCredentials = async () => {
     try {
-      await SecureStore.setItemAsync('email', email);
-      await SecureStore.setItemAsync('password', password);
-      await SecureStore.setItemAsync('isAdmin', isAdmin);
-      // login()
-      navigation.navigate("Home");
-      console.log('Credentials stored successfully. And Isadmin = ', isAdmin);
+      const emailString = String(email);
+      const passwordString = String(password);
+      const isAdminString = String(isAdmin);
+      await SecureStore.setItemAsync('email', emailString);
+      await SecureStore.setItemAsync('password', passwordString);
+      await SecureStore.setItemAsync('isAdmin', isAdminString);
+      // getStoredCredentials()
+      login()
+      // navigation.navigate("HomeScreen");
+      console.log('Credentials stored successfully. And Isadmin = ', isAdminString);
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -160,9 +185,10 @@ const Login = ({ navigation }) => {
 
 
   const handleLogin = async () => {
-    const abortController = new AbortController();
+    // const abortController = new AbortController();
     if (email.length == 0) {
       alert("Type your email");
+      email1.focus()
     }
     else if (password.length == 0) {
       alert("Type your password");
@@ -179,7 +205,7 @@ const Login = ({ navigation }) => {
 
         var Data = {
           Email: email,
-          isAdmin: isAdmin,
+          // isAdmin: isAdmin,
           Password: password
         };
 
@@ -190,15 +216,26 @@ const Login = ({ navigation }) => {
         })
           .then((Response) => Response.json())
           .then((Response) => {
-            alert(Response[0].Message)
-            if ((Response[0].IsAdmin) == "true") {
-              console.log("Admin Login from DB : ", Response[0].IsAdmin);
-              setIsAdmin(Response[0].IsAdmin);
-            }
             // console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
+              alert(Response[0].Message);
               console.log("Login true =============")
+              if ((Response[0].IsAdmin) == "true") {
+                console.log("Admin Login from DB : ", Response[0].IsAdmin);
+                setIsAdmin(Response[0].IsAdmin);
+                storeCredentials()
+              }
               storeCredentials()
+            }
+            else {
+              alert(Response[0].Message);
+            }
+            if (Response[0].Message == "No account yet") {
+              // console.log("Login true =============")
+              // email1.clear();
+              // password1.clear();
+
+              // storeCredentials()
             }
             console.log("Data", Data);
           })
@@ -211,6 +248,7 @@ const Login = ({ navigation }) => {
     }
     console.log("input email = ", email);
     console.log("input password = ", password);
+
   }
 
   return (

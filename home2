@@ -1,0 +1,34 @@
+<NavigationContainer>
+        <Context>
+          {/* <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}> */}
+          <Stack.Navigator >
+
+            <Stack.Screen
+              name="UserTab"
+              component={UserTabs}
+              options={{
+                title: null, headerLeft: () => (profile()), headerStyle: {
+                  backgroundColor: "#fff",
+                },
+                // header: () => showHeader && <NoHeader />,
+                headerShadowVisible: false,
+                headerShown: false,
+              }}
+            // options={{ title: null, headerShown: false}}
+            />
+            <Stack.Screen name="Program" component={Program} />
+            <Stack.Screen name="About" component={About} />
+            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
+              headerTitle: "October 2023 Conferences"
+            }} />
+            <Stack.Screen name="Notifications" component={Notification} />
+            <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
+            <Stack.Screen name="Pdf Screen" component={PdfScreen} />
+            <Stack.Screen name="About Conference" component={AboutConference} options={{
+              headerTitleAlign: "center",
+            }} />
+            <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+          {/* </MyContext.Provider> */}
+        </Context>
+      </NavigationContainer>

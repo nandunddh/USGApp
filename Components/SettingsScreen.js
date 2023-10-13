@@ -4,7 +4,8 @@ import { Message_data } from './context';
 
 
 const SettingsScreen = () => {
-  const { message } = useContext(Message_data);
+    const {isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin} = useContext(Message_data)
+  // const { message } = useContext(Message_data);
   const [email, setEmail] = useState("")
   const email1 = useRef()
   return (

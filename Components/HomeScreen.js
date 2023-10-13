@@ -1,5 +1,5 @@
 import { View, Text, Button, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, StyleSheet, ScrollView, useWindowDimensions, TextInput, Dimensions } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from '@react-navigation/native'
 // import Program from "./Program"
 import axios from 'axios'
@@ -18,6 +18,7 @@ import { SearchBar } from 'react-native-screens';
 import ConferencesList from "./Tabs/ConferencesList"
 import { notificationData, popular_conferences, upcomingConferencelist } from './Data/data';
 import ViewSlider from 'react-native-view-slider';
+import MyContext from './MyContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -36,9 +37,12 @@ const HomeScreen = ({ navigation }) => {
   const [Sessions, setSessions] = useState([])
   const popular_conference = popular_conferences;
 
+  const {isAdmin, isLogin} = useContext(MyContext)
+
   useEffect(() => {
     // fetchDatatest()
-  }, [Plenary, Keynote, Oral]);
+    console.log("isLogin from Home == ", isLogin)
+  }, [Plenary, Keynote, Oral, isAdmin]);
 
   const handpleupcomming = ({ upcomingConference }) => {
     // const screenname = "UpComingConferenceScreen";

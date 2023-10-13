@@ -1,12 +1,17 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useContext } from 'react';
 import MyContext from '../MyContext';
 import * as SecureStore from 'expo-secure-store';
 import Login from './Login';
+import { Message_data } from '../context';
 
 const Logout = ({ navigation }) => {
   const { isLogin, setIsLogin, isAdmin, setIsAdmin, setStoredCredentials, storedCredentials } = useContext(MyContext)
+
+  useEffect(() => {
+    console.log("login", isLogin)
+  }, [isLogin, storedCredentials])
 
   const clearCredentials = async () => {
     try {
@@ -14,7 +19,7 @@ const Logout = ({ navigation }) => {
       await SecureStore.deleteItemAsync('password');
       setStoredCredentials(null)// Clear stored credentials in state
       setIsLogin(false)
-      // navigation.navigate("Sign in");
+      navigation.navigate("Sign in");
       console.log('Credentials cleared (logged out) successfully.');
     } catch (error) {
       console.error('Error clearing credentials:', error);
