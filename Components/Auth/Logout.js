@@ -5,8 +5,10 @@ import MyContext from '../MyContext';
 import * as SecureStore from 'expo-secure-store';
 import Login from './Login';
 import { Message_data } from '../context';
+import { useNavigation } from '@react-navigation/native';
 
-const Logout = ({ navigation }) => {
+const Logout = () => {
+  const navigation = useNavigation();
   const { isLogin, setIsLogin, isAdmin, setIsAdmin, setStoredCredentials, storedCredentials } = useContext(MyContext)
 
   useEffect(() => {
@@ -17,9 +19,17 @@ const Logout = ({ navigation }) => {
     try {
       await SecureStore.deleteItemAsync('email');
       await SecureStore.deleteItemAsync('password');
+      navigation.navigate("HomeScreen");
       setStoredCredentials(null)// Clear stored credentials in state
-      setIsLogin(false)
-      navigation.navigate("Sign in");
+      // setIsLogin(false)
+
+      // navigation.navigate('Login', {
+      //   screen: "Sign in"
+      // }
+      // );
+      // navigation.navigate('UserTab', {
+      //   screen: 'HomeScreen',
+      // });
       console.log('Credentials cleared (logged out) successfully.');
     } catch (error) {
       console.error('Error clearing credentials:', error);

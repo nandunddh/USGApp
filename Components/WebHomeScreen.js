@@ -16,14 +16,13 @@ import { Zocial } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { SearchBar } from 'react-native-screens';
 import ConferencesList from "./Tabs/ConferencesList"
-// import { notificationData, popular_conferences, upcomingConferencelist } from './Data/data';
-import { notificationData, popular_conferences } from './Data/data';
+import { notificationData, popular_conferences, upcomingConferencelist } from './Data/data';
 import ViewSlider from 'react-native-view-slider';
 import MyContext from './MyContext';
 
 const { width, height } = Dimensions.get('window');
 
-const HomeScreen = ({ navigation }) => {
+const WebHomeScreen = ({ navigation }) => {
   const spreadsheetId = 'https://docs.google.com/spreadsheets/d/13dC1M4SvysyiAogGLQDqYn7IIqbKW_zEKMmBQWFCjJI/edit?usp=sharing'
   const range = 'Sheet1!D' // Assuming the URLs are in column A and other data is in column B
   const apiKey = 'AIzaSyDIpd5CY4qApQ5t_azRPvLPr26gqTiC3HA'
@@ -33,69 +32,17 @@ const HomeScreen = ({ navigation }) => {
     'https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}'
   const [Plenary, setPlenary] = useState([])
   const [Keynote, setKeynote] = useState([])
-  const [program, setProgram] = useState(false)
   const [user, setUsers] = useState()
   const [Oral, setOral] = useState([])
   const [Sessions, setSessions] = useState([])
-  const [upcomingConferencelist, setUpcomingConferencelist] = useState([])
   const popular_conference = popular_conferences;
 
   const { isAdmin, isLogin } = useContext(MyContext)
 
   useEffect(() => {
     // fetchDatatest()
-    handleupcomingconferencelist()
     console.log("isLogin from Home == ", isLogin)
   }, [Plenary, Keynote, Oral, isAdmin]);
-
-  const handleupcomingconferencelist = async () => {
-    try {
-      var APIURL = "http://192.168.2.117:8000/GetConferenceDetails.php";
-      // var APIURL = "http://127.0.0.1:8000/USG/login.php";
-
-      var headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      };
-
-      // var Data = {
-      //   Email: email,
-      //   // isAdmin: isAdmin,
-      //   Password: password
-      // };
-
-      fetch(APIURL, {
-        method: 'GET',
-        headers: headers,
-        // body: JSON.stringify(Data)
-      })
-        .then((Response) => Response.json())
-        .then((Response) => {
-          // console.log("Login ===", Response);
-          if (Response[0].Message == "Success") {
-            alert(Response[0].Message);
-            console.log("Data upcomingconferencelist data Base == ", Response[0].data)
-            setUpcomingConferencelist(Response[0].data)
-          }
-          else {
-            alert(Response[0].Message);
-          }
-          // if (Response[0].Message == "No Data Found") {
-          // console.log("Login true =============")
-          // email1.clear();
-          // password1.clear();
-
-          // storeCredentials()
-          // }
-        })
-        .catch((error) => {
-          console.error("ERROR FOUND" + error);
-        })
-    } catch (error) {
-      alert("Fetch Error!")
-    }
-  }
-
 
   const handpleupcomming = ({ upcomingConference }) => {
     // const screenname = "UpComingConferenceScreen";
@@ -156,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <ScrollView>
 
-        {/* <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
+        <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
           <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 190 }} />
           <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
           <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
@@ -178,13 +125,13 @@ const HomeScreen = ({ navigation }) => {
               <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
                 <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
               </TouchableOpacity>
-              <Button title='SIGN IN' color="#000" /> 
+              {/* <Button title='SIGN IN' color="#000" />  */}
             </View>
-            <View>
+            {/* <View>
               <Text style={{ textAlign: "center" }}>Register Now</Text> 
-            </View>
+            </View> */}
           </View>
-        </View>  */}
+        </View> 
       </ScrollView>
     )
   }
@@ -236,9 +183,7 @@ const HomeScreen = ({ navigation }) => {
                   {/* <Text>10 53 pm</Text> */}
                   <Text style={{ marginBottom: 5, fontWeight: "bold", color: "#f66b10", fontSize: 14, textAlign: "center" }}>$210</Text>
                   {/* <Text style={{ fontWeight: "bold", fontSize: 15 }} oonPress={() => {navigation.navigate({ upcomingConference }) }}>Join Now</Text> */}
-                  <TouchableOpacity>
-                    <Text style={{ fontWeight: "bold", fontSize: 15 }} onPress={() => { handpleupcomming({ upcomingConference }) }}>Join Now</Text>
-                  </TouchableOpacity>
+                  <Text style={{ fontWeight: "bold", fontSize: 15 }} onPress={() => { handpleupcomming({ upcomingConference }) }}>Join Now</Text>
                 </View>
               </View>
             )
@@ -336,7 +281,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <View style={{ marginTop: -60, flexDirection: "row", marginBottom: 30, }}>
 
-            <ViewSlider
+            {/* <ViewSlider
               renderSlides={
                 <>
                   {popular_conferences && popular_conferences.map((item, index) => {
@@ -362,18 +307,13 @@ const HomeScreen = ({ navigation }) => {
                                 <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={() => { handpleUrlPress({ item }) }}>
                                   <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}> Register Now </Text>
                                 </TouchableOpacity>
-                                {program &&
-                                  <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "green", paddingVertical: 12, paddingHorizontal: 20, marginLeft: 10 }} onPress={() => { handpleUrlPress({ item }) }}>
-                                    <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>Program </Text>
-                                  </TouchableOpacity>
-                                }
                                 {/* <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
                                 <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
-                              </TouchableOpacity> */}
-                                {/* <Button title='SIGN IN' color="#000" /> */}
+                              </TouchableOpacity>
+                                <Button title='SIGN IN' color="#000" />
                               </View>
                               <View>
-                                {/* <Text style={{ textAlign: "center" }}>Register Now</Text> */}
+                                {/* <Text style={{ textAlign: "center" }}>Register Now</Text> 
                               </View>
                             </View>
                           </View>
@@ -392,9 +332,9 @@ const HomeScreen = ({ navigation }) => {
               // dotsContainerStyle={styles.dotContainer}     // Container style of the pagination dots
               autoSlide={true}    //The views will slide automatically
               slideInterval={5000}    //In Miliseconds
-            />
+            /> */}
             {/* <HandleUrl item={popular_conference} /> */}
-            {/* <FlatList
+            <FlatList
             data={popular_conference}
             renderItem={({ item }) =>
               <HandleUrl item={item} />
@@ -402,7 +342,7 @@ const HomeScreen = ({ navigation }) => {
             horizontal
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-          /> */}
+          />
           </View>
           {/* current conferences end */}
           {/* Up coming conferences start */}
@@ -429,7 +369,7 @@ const HomeScreen = ({ navigation }) => {
           {/* conferences 2024 ends */}
           {/* ABout */}
           <View>
-            {/* <Text>Getting Data email</Text> */}
+            <Text>Getting Data email</Text>
           </View>
           <ScrollView>
             <View style={{ backgroundColor: "#fff", paddingVertical: 10, height: "100%" }}>
@@ -565,7 +505,7 @@ const HomeScreen = ({ navigation }) => {
   );
 }
 
-export default HomeScreen
+export default WebHomeScreen
 
 
 const styles = StyleSheet.create({

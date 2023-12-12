@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
+import { DB_URL } from '../Constants/Constants';
 
 const SignUp = ({ navigation }) => {
   const [hidePass, setHidePass] = useState(true);
@@ -67,7 +68,8 @@ const SignUp = ({ navigation }) => {
       alert("Password doesnot match!!!");
     }
     else {
-      var InsertAPIURL = "http://192.168.2.117:8000/Signup.php";   //API to render signup
+      var InsertAPIURL = `${DB_URL}Signup.php`;   //API to render signup
+      // var InsertAPIURL = "http://192.168.2.117:8000/Signup.php";   //API to render signup
 
       var headers = {
         'Accept': 'application/json',
@@ -95,7 +97,7 @@ const SignUp = ({ navigation }) => {
           alert(response[0].Message);
           console.log(response[0].Message);
           storeCredentials()
-          navigation.navigate("Sign in");
+          navigation.navigate('Sign_in');
           console.log("DATA", Data)     // If data is in JSON => Display alert msg
           // this.props.navigation.navigate("SignInScreen"); //Navigate to next screen if authentications are valid
         })
@@ -168,7 +170,7 @@ const SignUp = ({ navigation }) => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontSize: 15 }}> Already have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
-                navigation.navigate('Sign in')
+                navigation.navigate('Sign_in')
               }> Sign In </Text></Text>
             </View>
             {/* <Button

@@ -84,11 +84,11 @@ const FirstRoute = () => (
                   <Text style={{ fontWeight: "normal", fontSize: 16 }}>{notificationDesc.venu}</Text>
                 </View>
               </View>
-              <View style={{ borderTopWidth: 1,flexDirection: "row", flex: 1,borderColor: "#bfbfbf" }}>
+              <View style={{ borderTopWidth: 1, flexDirection: "row", flex: 1, borderColor: "#bfbfbf" }}>
                 <View style={{ flex: 2, alignItems: "center", justifyContent: "center" }}>
                   <Text style={{ fontSize: 16 }}> <Entypo name="ticket" size={18} color="black" /> From <Text style={{ fontWeight: "bold", fontSize: 18, }}>$200</Text></Text>
                 </View>
-                <View style={{ flex: 1, borderLeftWidth: 1, paddingHorizontal: 10, paddingBottom: 5 , borderColor: "#bfbfbf" }}>
+                <View style={{ flex: 1, borderLeftWidth: 1, paddingHorizontal: 10, paddingBottom: 5, borderColor: "#bfbfbf" }}>
                   <Text style={{ fontWeight: "bold", fontSize: 16, textAlign: "center", color: "#fff", backgroundColor: "#363942", paddingVertical: 10, marginTop: 5, borderRadius: 5 }} onPress={() => { Linking.openURL(`${notificationDesc.url}`) }}>Register Now</Text>
                 </View>
               </View>
@@ -140,6 +140,11 @@ const renderScene = SceneMap({
   3: FirstRoute,
   4: SecondRoute,
   5: FirstRoute,
+  6: FirstRoute,
+  7: SecondRoute,
+  8: FirstRoute,
+  9: SecondRoute,
+  10: FirstRoute,
 });
 
 export default function TabViewExample() {
@@ -153,29 +158,35 @@ export default function TabViewExample() {
     { key: '3', title: 'First' },
     { key: '4', title: 'Second' },
     { key: '5', title: 'First' },
+    // { key: '6', title: 'First' },
+    // { key: '7', title: 'Second' },
+    // { key: '8', title: 'First' },
+    // { key: '9', title: 'Second' },
+    // { key: '10', title: 'First' },
   ]);
 
   <TabBar
     renderLabel={({ route, color }) => (
       <Text style={{ color: 'black', margin: 10, fontSize: 30, fontWeight: "bold" }}>
-        {route.title}
+        {/* {route.title} */}
       </Text>
     )}
     style={{ borderRadius: 50 }}
   />
 
   return (
-
-    <View style={{ height: 1100 }}>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        // style={{ backgroundColor: "#f66b10" }}
-        renderTabBar={props => <TabBar {...props} style={{ backgroundColor: '#f66b10', borderRadius: 50, borderColor: "#fff" }} />}
-      />
-    </View>
+    <ScrollView>
+      <View style={{ height: 1110 }}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width, }}
+          // style={{ backgroundColor: "#f66b10" }}
+          renderTabBar={props => <TabBar {...props} style={{ backgroundColor: '#f66b10', borderRadius: 50, borderColor: "#fff" }} />}
+        />
+      </View>
+    </ScrollView>
 
   );
 }
