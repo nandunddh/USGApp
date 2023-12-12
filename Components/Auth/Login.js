@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, TextInput, StyleSheet, Touchable, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Button, Image, TextInput, StyleSheet, Touchable, TouchableOpacity, ScrollView, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import * as SecureStore from 'expo-secure-store';
 // import MyContext from '../MyContext'
@@ -19,12 +19,18 @@ import { Fontisto } from '@expo/vector-icons';
 import MyContext from '../MyContext';
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
+import { Message_data } from '../context';
+import { useNavigation } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
+import { DB_URL } from '../Constants/Constants';
+
 
 webBrowser.maybeCompleteAuthSession()
 
 //  444587957400-mr03enhtcfps1ahsfmgp87a48fsc86k5.apps.googleusercontent.com
 // 444587957400-2viqkgafr295mhjr4273iokhvm6rk68a.apps.googleusercontent.com
-const Login = ({ navigation }) => {
+const Login = () => {
+  const navigation = useNavigation();
   const [userInfo, setuserInfo] = useState(null)
   const [hidePass, setHidePass] = useState(true);
   const email1 = useRef();
@@ -35,7 +41,7 @@ const Login = ({ navigation }) => {
   //   email: "",
   //   password: "",
   // });
-  const { isLogin, setIsLogin, setIsAdmin, isAdmin } = useContext(MyContext)
+  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email } = useContext(MyContext)
 
   // const handleChange = (event = {}) => {
   //   const name = event.target && event.target.name;
@@ -54,58 +60,64 @@ const Login = ({ navigation }) => {
   })
 
   useEffect(() => {
-    handleSignInWithGoogle();
+    console.log(Platform.OS);
+    if (response?.type === 'success') {
+      handleSignInWithGoogle();
+    }
     // console.log("Data = ", response);
-    if(email !== ""){
-      handleLogin()
-    }
-    // console.log(email)
-  }, [response, isLogin, isAdmin, email])
+    // if(email !== ""){
+    //   handleLogin()
+    // }
+    // SplashScreen.hide();
 
-  async function handleSignInWithGoogle() {
-    const user = await AsyncStorage.getItem('@user')
-    if (!user) {
-      if (response?.type === 'success') {
-        await getUserInfo(response.authentication.accessToken);
-        console.log("!user = ", userInfo)
-        // setIsLogin(true);
-        // alert('Login Success!');
-      }
-    } else {
-      setuserInfo(JSON.parse(user));
-      login()
-      // setIsLogin(true)
-      // alert('Login Success!')
-    }
-  }
+    getStoredCredentials();
+    console.log("isLogin from login === ", isAdmin)
+  }, [response, isLogin, isAdmin, email, storedCredentials])
 
-  const getUserInfo = async (token) => {
-    if (!token) return
-    try {
-      const response = await fetch(
-        'https://www.googleapis.com/userinfo/v2/me',
-        // 'https://accounts.google.com/o/oauth2/auth',
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      )
+  // async function handleSignInWithGoogle() {
+  //   const user = await AsyncStorage.getItem('@user')
+  //   if (!user) {
+  //     if (response?.type === 'success') {
+  //       await getUserInfo(response.authentication.accessToken);
+  //       console.log("!user = ", userInfo)
+  //       // setIsLogin(true);
+  //       // alert('Login Success!');
+  //     }
+  //   } else {
+  //     setuserInfo(JSON.parse(user));
+  //     login()
+  //     // setIsLogin(true)
+  //     // alert('Login Success!')
+  //   }
+  // }
 
-      const user = await response.json()
-      await AsyncStorage.setItem('@user', JSON.stringify(user))
-      setuserInfo(user)
-      login()
-      alert('Login Success!');
-    } catch (error) { }
-  }
+  // const getUserInfo = async (token) => {
+  //   if (!token) return
+  //   try {
+  //     const response = await fetch(
+  //       'https://www.googleapis.com/userinfo/v2/me',
+  //       // 'https://accounts.google.com/o/oauth2/auth',
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       },
+  //     )
 
-  const insets = useSafeAreaInsets()
+  //     const user = await response.json()
+  //     await AsyncStorage.setItem('@user', JSON.stringify(user))
+  //     setuserInfo(user)
+  //     login()
+  //     alert('Login Success!');
+  //   } catch (error) { }
+  // }
 
-  const login = () => {
-    setIsLogin(true)
-    if (email === "nandu@admin.com") {
-      setIsAdmin(true)
-    }
-  }
+  // const insets = useSafeAreaInsets()
+
+  // const login = () => {
+  //   setIsLogin(true)
+  //   if (email === "nandu@admin.com") {
+  //     setIsAdmin(true)
+  //   }
+  // }
   // const handleLogin = () => {
   //   if ((email.length == 0) || (password.length == 0)) {
   //     alert("Required Field Is Missing!!!");
@@ -144,15 +156,56 @@ const Login = ({ navigation }) => {
 
 
   // }
+
+  const getStoredCredentials = async () => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync('email');
+      const storedPassword = await SecureStore.getItemAsync('password');
+      // const storedisAdmin = await SecureStore.getItemAsync('isAdmin');
+      if (storedEmail && storedPassword) {
+        setStoredCredentials({ email: storedEmail, password: storedPassword });
+        if (storedEmail === "nandu@test.com") {
+          // navigation.navigate('HomeScreen');
+          navigation.navigate('UserTab', {
+            screen: 'HomeScreen',
+          });
+        }
+        else if (storedEmail === "admin@test.com") {
+          navigation.navigate('AdminTab', {
+            screen: 'HomeScreen',
+          });
+        }
+        // setIsLogin(true);
+        // if (storedisAdmin === "true") {
+        //   setIsAdmin(true);
+        // }
+        // {storeCredentials && 
+        // navigation.navigate("") }
+
+        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
+      } else {
+        console.log('No credentials found.');
+      }
+    } catch (error) {
+      console.error('Error retrieving credentials:', error);
+    }
+  }
   // Function to store credentials
   const storeCredentials = async () => {
     try {
-      await SecureStore.setItemAsync('email', email);
-      await SecureStore.setItemAsync('password', password);
-      await SecureStore.setItemAsync('isAdmin', isAdmin);
+      const emailString = String(email);
+      const passwordString = String(password);
+      // const isAdminString = String(isAdmin);
+      await SecureStore.setItemAsync('email', emailString);
+      await SecureStore.setItemAsync('password', passwordString);
+      // await SecureStore.setItemAsync('isAdmin', isAdminString);
+      // getStoredCredentials()
       // login()
-      navigation.navigate("Home");
-      console.log('Credentials stored successfully. And Isadmin = ', isAdmin);
+      navigation.navigate('UserTab', {
+        screen: 'HomeScreen',
+      });
+      // navigation.navigate("HomeScreen");
+      console.log('Credentials stored successfully. And Isadmin = ', isAdminString);
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -160,16 +213,18 @@ const Login = ({ navigation }) => {
 
 
   const handleLogin = async () => {
-    const abortController = new AbortController();
+    // const abortController = new AbortController();
     if (email.length == 0) {
       alert("Type your email");
+      email1.focus()
     }
     else if (password.length == 0) {
       alert("Type your password");
     }
     else {
       try {
-        var APIURL = "http://192.168.2.117:8000/login.php";
+        // var APIURL = `http://localhost:8081/SERVER(backend)/login.php`;
+        var APIURL = `${DB_URL}login.php`;
         // var APIURL = "http://127.0.0.1:8000/USG/login.php";
 
         var headers = {
@@ -179,7 +234,7 @@ const Login = ({ navigation }) => {
 
         var Data = {
           Email: email,
-          isAdmin: isAdmin,
+          // isAdmin: isAdmin,
           Password: password
         };
 
@@ -190,15 +245,42 @@ const Login = ({ navigation }) => {
         })
           .then((Response) => Response.json())
           .then((Response) => {
-            alert(Response[0].Message)
-            if ((Response[0].IsAdmin) == "true") {
-              console.log("Admin Login from DB : ", Response[0].IsAdmin);
-              setIsAdmin(Response[0].IsAdmin);
-            }
             // console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
-              console.log("Login true =============")
-              storeCredentials()
+              // console.log("Login", Response)
+              // console.log("Login true =============")
+              if (Platform.OS == "web") {
+                if ((Response[0].IsAdmin) == "true") {
+                  alert("Admin Login!");
+                  setUser_email(email)
+                  console.log("Admin Login from DB : ", Response[0].IsAdmin);
+                  navigation.navigate('WebAdminTab', {
+                    screen: 'HomeScreen',
+                  });
+                  setIsAdmin(Response[0].IsAdmin);
+                  // storeCredentials()
+                }
+                else {
+                  alert(Response[0].Message);
+                  setUser_email(email)
+                  navigation.navigate('Web_Tabs', {
+                    screen: 'HomeScreen',
+                  });
+                }
+              }
+              else {
+                storeCredentials()
+              }
+            }
+            else {
+              alert(Response[0].Message);
+            }
+            if (Response[0].Message == "No account yet") {
+              // console.log("Login true =============")
+              // email1.clear();
+              // password1.clear();
+
+              // storeCredentials()
             }
             console.log("Data", Data);
           })
@@ -209,8 +291,24 @@ const Login = ({ navigation }) => {
         alert("Fetch Error!")
       }
     }
+    // else {
+    //   if (email === "nandu@test.com") {
+    //     // navigation.navigate('HomeScreen');
+    //     storeCredentials()
+    //     navigation.navigate('UserTab', {
+    //       screen: 'HomeScreen',
+    //     });
+    //   }
+    //   else if (email === "admin@test.com") {
+    //     storeCredentials()
+    //     navigation.navigate('AdminTab', {
+    //       screen: 'HomeScreen',
+    //     });
+    //   }
+    // }
     console.log("input email = ", email);
     console.log("input password = ", password);
+
   }
 
   return (
@@ -239,8 +337,8 @@ const Login = ({ navigation }) => {
 
               </View>
               <View style={styles.inputbox}>
-                <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
-                <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword(password)} ref={password1} />
+                <Feather name="lock" size={30} color="black" style={{ marginLeft: 15, alignSelf: "center", flex: 1 }} />
+                <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={false} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword(password)} ref={password1} />
                 {hidePass ?
                   <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
                   :
@@ -251,7 +349,7 @@ const Login = ({ navigation }) => {
               </View>
               <View>
                 <TouchableOpacity onPress={() =>
-                  navigation.navigate("Reset Password")}>
+                  navigation.navigate("Reset_Password")}>
                   <Text style={styles.forgetpassword}>Forget Password?</Text>
                 </TouchableOpacity>
               </View>
@@ -282,7 +380,7 @@ const Login = ({ navigation }) => {
             </View>
             <View>
               <Text style={{ textAlign: "center", fontSize: 15, }}> Don't have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
-                navigation.navigate('Sign Up')
+                navigation.navigate('Sign_Up')
               }> Sign Up </Text></Text>
             </View>
             {/* <Button

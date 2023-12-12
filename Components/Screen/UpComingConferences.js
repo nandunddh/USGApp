@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, FlatList, ScrollView } from 'react-nativ
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import MyContext from '../MyContext';
+import { Message_data } from '../context';
 
 const UpComingConferences = () => {
   useEffect(() => {

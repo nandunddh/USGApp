@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet, FlatList, ScrollView } from 'react-nativ
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import MyContext from '../MyContext';
+import { Message_data } from '../context';
 
 const Notification = ({ route }) => {
   useEffect(() => {
@@ -99,16 +100,17 @@ const Notification = ({ route }) => {
               .reverse().map((notificationDesc, index) => {
                 return (
                   <View style={styles.notificationcontainer} key={index - 1}>
-                    <View style={{ width: "20%", }}>
+                    <View style={{ width: "18%", }}>
                       <Image source={notificationDesc.image} />
                     </View>
                     <View style={{ width: "60%", }}>
                       <Text style={{ fontWeight: "600", fontSize: 17 }}>{notificationDesc.name} {"\n"}<Text style={{ paddingLeft: 10, fontWeight: "normal", fontSize: 15 }}>{notificationDesc.text}</Text>
                       </Text>
                     </View>
-                    <View style={{ width: "20%", paddingHorizontal: 1 }}>
+                    <View style={{ width: "22%", paddingHorizontal: 1 }}>
                       {/* <Text>10 53 pm</Text> */}
                       <Text>{notificationDesc.time}</Text>
+                      <Text>10/10/2023</Text>
                     </View>
                   </View>
                 )

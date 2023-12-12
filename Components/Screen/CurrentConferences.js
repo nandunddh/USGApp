@@ -49,7 +49,7 @@ const CurrentConferences = () => {
       Linking.openURL(url);
     }
     return (
-      <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, marginVertical: 10, }}>
+      <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginVertical: 10, }}>
         <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 230}} />
         <View style={{ paddingHorizontal: 10, borderColor: "#000", flex: 1, }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
@@ -69,7 +69,7 @@ const CurrentConferences = () => {
             <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
               <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
             </TouchableOpacity>
-            {/* <Button title='SIGN IN' color="#000" /> */}
+            <Button title='SIGN IN' color="#000" />
           </View>
           <View>
             {/* <Text style={{ textAlign: "center" }}>Register Now</Text> */}

@@ -1,177 +1,41 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+
+import { Image, Platform, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from './Components/HomeScreen'
-import SettingsScreen from './Components/SettingsScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import Program from './Components/Program'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Settings from './Components/About'
 import About from './Components/About'
 import Login from './Components/Auth/Login'
 import { useEffect, useRef, useState } from 'react'
 import MyContext from './Components/MyContext'
 import SignUp from './Components/Auth/SignUp'
 import ResetPassword from './Components/Auth/ResetPassword'
-import ProfileSideBar from './Components/ProfileSideBar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import CurrentConferences from './Components/Screen/CurrentConferences'
 import Notification from './Components/Tabs/Notification'
 import AdminNotification from './Components/AdminScreens/AdminNotification'
-
 import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import Constants from "expo-constants";
 import PolymersScreen from './Components/Screen/PolymersScreen'
-import ConferencesList from './Components/Tabs/ConferencesList'
 import ConferenceScreen from './Components/Screen/ConferenceScreen'
 import AboutConference from './Components/Screen/AboutConference'
 import PdfScreen from './Components/Screen/PdfScreen'
 import Logout from './Components/Auth/Logout'
-import { notificationDes } from './Components/Data/data'
-import Context from './Components/context'
+import { nfData } from './Components/Data/data'
+import AddConference from './Components/AdminScreens/AddConference'
+import WebTabs from './Components/OS(platform)/Web/WebTabs'
+import UserTabs from './Components/Tabs/UserTabs'
+import AdminTabs from './Components/Tabs/AdminTabs'
+import WebAdminTabs from './Components/OS(platform)/Web/WebAdminTabs'
+import Test from './Components/Test'
+import Verificationcode from './Components/Auth/Verificationcode'
+import New_Password from './Components/Auth/New_Password'
+import MyComponent from './Components/Auth/MyComponent'
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
-
-function UserTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          headerTitle: null,
-          title: " ",
-          headerShadowVisible: false,
-          headerLeft: () => (profile()), headerStyle: {
-            backgroundColor: "#373a43",
-          },
-          headerStyle: {
-            backgroundColor: "#373a43"
-          }
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          headerTitleAlign: 'center',
-          // headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
-
-
-        }}
-      />
-      <Tab.Screen
-        name="Events"
-        component={ConferencesList}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
-
-
-        }}
-      />
-      <Tab.Screen
-        name="LogOut"
-        component={Logout}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
-
-
-        }}
-      />
-      {/* <Tab.Screen name="Program" component={Program}/> */}
-    </Tab.Navigator>
-  )
-}
-
-function AdminTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          headerTitle: null,
-          title: " ",
-          headerShadowVisible: false,
-          headerLeft: () => (profile()), headerStyle: {
-            backgroundColor: "#373a43",
-          },
-          headerStyle: {
-            backgroundColor: "#373a43"
-          }
-        }}
-      />
-      <Tab.Screen
-        name="Create Notifications"
-        component={AdminNotification}
-        options={{
-          headerTitleAlign: "center",
-          // headerShadowVisible: false,
-          title: "Notification",
-          headerTitle: "Create Notifications",
-          // headerShown: false,
-
-
-
-        }}
-      />
-      <Tab.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
-
-
-        }}
-      />
-      <Tab.Screen
-        name="LogOut"
-        component={Logout}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
-
-
-        }}
-      />
-      {/* <Tab.Screen name="Program" component={Program}/> */}
-    </Tab.Navigator>
-  )
-}
-const profile = () => {
-  return (
-    <SafeAreaProvider style={{ backgroundColor: "#373a43", height: 90, width: "auto", borderBottomColor: "#373a43 !important", }}>
-      <View>
-        <View style={{ flexDirection: "row", }}>
-          <View>
-            <Image source={require("./assets/favicon.png")} style={{ borderRadius: 25, marginLeft: 10 }} />
-          </View>
-          <View style={{ marginLeft: 15 }}>
-            <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-            <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}> Nandu kumar </Text>
-          </View>
-        </View>
-      </View>
-    </SafeAreaProvider>
-  )
-}
 
 // Notifications start //
 Notifications.setNotificationHandler({
@@ -246,12 +110,15 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  // const {isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin} = useContext(Message_data)
+
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   const [storedCredentials, setStoredCredentials] = useState(null);
-  const [notificationDesc, setNotificationDesc] = useState(notificationDes)
+  const [notificationDesc, setNotificationDesc] = useState(nfData)
   const [time, setTime] = useState([])
+  const [user_email, setUser_email] = useState()
 
   const getStoredCredentials = async () => {
     try {
@@ -264,7 +131,7 @@ export default function App() {
         if (isAdmin === "true") {
           setIsAdmin(true);
         }
-        console.log('Stored Credentials:', { email: storedEmail, password: storedPassword, isAdmin: isAdmin });
+        console.log('Stored Credentials from app.js:', { email: storedEmail, password: storedPassword, isAdmin: storedisAdmin });
       } else {
         console.log('No credentials found.');
       }
@@ -275,6 +142,14 @@ export default function App() {
 
   useEffect(() => {
     console.log("isLogin", isLogin);
+    console.log("isAdmin", isAdmin);
+    if (Platform.OS === 'ios') {
+      // Your code is running on iOS.
+      console.log('Running on iOS');
+    } else if (Platform.OS === 'android') {
+      // Your code is running on Android.
+      console.log('Running on Android');
+    }
     getStoredCredentials()
   }, [isLogin, isAdmin, storedCredentials])
 
@@ -299,114 +174,251 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar style="light" />
+      {/*  */}
       <NavigationContainer>
-        <Context>
-          {/* <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}> */}
-          <Stack.Navigator >
-
-            <Stack.Screen
-              name="UserTab"
-              component={UserTabs}
-              options={{
-                title: null, headerLeft: () => (profile()), headerStyle: {
-                  backgroundColor: "#fff",
-                },
-                // header: () => showHeader && <NoHeader />,
-                headerShadowVisible: false,
-                headerShown: false,
-              }}
-            // options={{ title: null, headerShown: false}}
-            />
-            <Stack.Screen name="Program" component={Program} />
-            <Stack.Screen name="About" component={About} />
-            <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
-              headerTitle: "October 2023 Conferences"
-            }} />
-            <Stack.Screen name="Notifications" component={Notification} />
-            <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
-            <Stack.Screen name="Pdf Screen" component={PdfScreen} />
-            <Stack.Screen name="About Conference" component={AboutConference} options={{
-              headerTitleAlign: "center",
-            }} />
-            <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
-          </Stack.Navigator>
-          {/* </MyContext.Provider> */}
-        </Context>
-      </NavigationContainer>
-      {/* <NavigationContainer>
-        {!isLogin ? (
-          <MyContext.Provider value={{ isLogin, setIsLogin, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials }}>
-            <Stack.Navigator screenOptions={{
-              contentStyle: { backgroundColor: "#fff" }
-            }}>
+        <MyContext.Provider value={{ time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, user_email, setUser_email }}>
+          <Stack.Navigator screenOptions={{
+            contentStyle: { backgroundColor: "#fff" }
+          }}
+          // initialRouteName='MyComponent'
+          >
+            {/* {(Platform.OS == "ios" || Platform.OS == "web") ? ( */}
+            <>
+              {/* <Stack.Screen
+                name="MyComponent"
+                component={MyComponent}
+                // component={SettingsScreen}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "MyComponent" }}
+              /> */}
               <Stack.Screen
-                name="Sign in"
+                name="Sign_in"
                 component={Login}
                 // component={SettingsScreen}
-                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "Login" }}
               />
               <Stack.Screen
-                name="Sign Up"
+                name="Sign_Up"
                 component={SignUp}
-                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "Register" }}
               />
               <Stack.Screen
-                name="Reset Password"
+                name="Reset_Password"
                 component={ResetPassword}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "Reset Password" }}
+              />
+              <Stack.Screen
+                name="Verificationcode"
+                component={Verificationcode}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "Verify code" }}
+              />
+              <Stack.Screen
+                name="New_Password"
+                component={New_Password}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "New Password" }}
+              />
+              <Stack.Screen
+                name="Web_Tabs"
+                component={WebTabs}
+                options={{ headerShadowVisible: false, headerShown: false }}
+              />
+              <Stack.Screen
+                name="WebAdminTab"
+                component={WebAdminTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              // options={{ title: null, headerShown: false}}
+              />
+              <Stack.Screen
+                name="ios_HomeScreen"
+                component={HomeScreen}
                 options={{ headerTitleAlign: "center", headerShadowVisible: false }}
               />
-            </Stack.Navigator>
-          </MyContext.Provider>
-        ) : (
-          <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}>
-            <Stack.Navigator >
-              {isAdmin ?
-                <Stack.Screen
-                  name="AdminTab"
-                  component={AdminTabs}
-                  options={{
-                    title: null, headerLeft: () => (profile()), headerStyle: {
-                      backgroundColor: "#fff",
-                    },
-                    // header: () => showHeader && <NoHeader />,
-                    headerShadowVisible: false,
-                    headerShown: false,
-                  }}
-                // options={{ title: null, headerShown: false}}
-                />
-                :
-                <Stack.Screen
-                  name="UserTab"
-                  component={UserTabs}
-                  options={{
-                    title: null, headerLeft: () => (profile()), headerStyle: {
-                      backgroundColor: "#fff",
-                    },
-                    // header: () => showHeader && <NoHeader />,
-                    headerShadowVisible: false,
-                    headerShown: false,
-                  }}
-                // options={{ title: null, headerShown: false}}
-                />
-              }
+
+              <Stack.Screen
+                name="ios_AdminTab"
+                component={AdminTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              // options={{ title: null, headerShown: false}}
+              />
+              <Stack.Screen
+                name="ios_UserTab"
+                component={UserTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="HomeScreen"
+                component={HomeScreen}
+                options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+              />
+
+              <Stack.Screen
+                name="AdminTab"
+                component={AdminTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              // options={{ title: null, headerShown: false}}
+              />
+              <Stack.Screen
+                name="UserTab"
+                component={UserTabs}
+                options={{
+                  title: null, headerLeft: () => (profile()), headerStyle: {
+                    backgroundColor: "#fff",
+                  },
+                  // header: () => showHeader && <NoHeader />,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              />
               <Stack.Screen name="Program" component={Program} />
               <Stack.Screen name="About" component={About} />
               <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
                 headerTitle: "October 2023 Conferences"
               }} />
+              <Stack.Screen name="test" component={Test} />
               <Stack.Screen name="Notifications" component={Notification} />
               <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
               <Stack.Screen name="Pdf Screen" component={PdfScreen} />
               <Stack.Screen name="About Conference" component={AboutConference} options={{
                 headerTitleAlign: "center",
               }} />
-              <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          </MyContext.Provider>
-        )}
-      </NavigationContainer> */}
+              <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: true, headerTransparent: true, headerTitle: " " }} />
+
+            </>
+          </Stack.Navigator>
+        </MyContext.Provider>
+      </NavigationContainer >
     </SafeAreaProvider >
   )
+  // return (
+  //   <SafeAreaProvider>
+  //     {/*  */}
+  //     <NavigationContainer>
+  //       {!isLogin ? (
+  //         // <Context>
+
+  //         <MyContext.Provider value={{ isLogin, setIsLogin, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials }}>
+  //           <Stack.Navigator screenOptions={{
+  //             contentStyle: { backgroundColor: "#fff" }
+  //           }}>
+  //             <Stack.Screen
+  //               name="Sign in"
+  //               component={Login}
+  //               // component={SettingsScreen}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             />
+  //             <Stack.Screen
+  //               name="Sign Up"
+  //               component={SignUp}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             />
+  //             <Stack.Screen
+  //               name="Reset Password"
+  //               component={ResetPassword}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             />
+  //           </Stack.Navigator>
+  //           {/* </Context> */}
+  //         </MyContext.Provider>
+
+  //       ) : (
+  //         // <Context>
+
+  //         <MyContext.Provider value={{ notificationDesc, setNotificationDesc, time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, }}>
+  //           <Stack.Navigator >
+  //             {isAdmin ?
+  //               <Stack.Screen
+  //                 name="AdminTab"
+  //                 component={AdminTabs}
+  //                 options={{
+  //                   title: null, headerLeft: () => (profile()), headerStyle: {
+  //                     backgroundColor: "#fff",
+  //                   },
+  //                   // header: () => showHeader && <NoHeader />,
+  //                   headerShadowVisible: false,
+  //                   headerShown: false,
+  //                 }}
+  //               // options={{ title: null, headerShown: false}}
+  //               />
+  //               :
+  //               <Stack.Screen
+  //                 name="UserTab"
+  //                 component={UserTabs}
+  //                 options={{
+  //                   title: null, headerLeft: () => (profile()), headerStyle: {
+  //                     backgroundColor: "#fff",
+  //                   },
+  //                   // header: () => showHeader && <NoHeader />,
+  //                   headerShadowVisible: false,
+  //                   headerShown: false,
+  //                 }}
+  //               // options={{ title: null, headerShown: false}}
+  //               />
+  //             }
+  //             <Stack.Screen name="Program" component={Program} />
+  //             <Stack.Screen name="About" component={About} />
+  //             <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
+  //               headerTitle: "October 2023 Conferences"
+  //             }} />
+  //             <Stack.Screen name="Notifications" component={Notification} />
+  //             <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
+  //             <Stack.Screen name="Pdf Screen" component={PdfScreen} />
+  //             <Stack.Screen name="About Conference" component={AboutConference} options={{
+  //               headerTitleAlign: "center",
+  //             }} />
+  //             <Stack.Screen name="ConferenceScreen" component={ConferenceScreen} options={{ headerShown: true, title: null,headerTransparent: true }} />
+  //             {/* <Stack.Screen
+  //               name="Sign in"
+  //               component={Login}
+  //               // component={SettingsScreen}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             />
+  //             <Stack.Screen
+  //               name="Sign Up"
+  //               component={SignUp}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             />
+  //             <Stack.Screen
+  //               name="Reset Password"
+  //               component={ResetPassword}
+  //               options={{ headerTitleAlign: "center", headerShadowVisible: false }}
+  //             /> */}
+  //           </Stack.Navigator>
+  //           {/* </Context> */}
+  //         </MyContext.Provider>
+
+  //       )
+  //       }
+  //     </NavigationContainer >
+  //   </SafeAreaProvider >
+  // )
 }
 
 const styles = StyleSheet.create({

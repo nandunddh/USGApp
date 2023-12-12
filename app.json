@@ -12,11 +12,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "Utilities/*": [
+          "./path/to/Utilities/*"
+        ]
+      }
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.USG"
     },
     "android": {
       "adaptiveIcon": {

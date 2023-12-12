@@ -229,4 +229,82 @@ const notificationDes = [{
   name: "FCT-2023",
   text: "FCT-2023",
   image: require("../../assets/favicon.png")
-},]
+},];
+
+export const nfData = [
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "NextGen Solar(SUN-2023)",
+    text: "Hello notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "Notification test!!!",
+    image: require("../../assets/favicon.png")
+  },
+  {
+    name: "FCT-2023",
+    text: "FCT-2023",
+    image: require("../../assets/favicon.png")
+  },
+]
