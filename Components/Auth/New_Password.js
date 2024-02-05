@@ -3,10 +3,11 @@ import React, { useRef, useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { DB_URL } from '../Constants/Constants';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Email } from './smtp';
 
 const New_Password = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const email = route.params?.email;
   const New_Password1 = useRef();

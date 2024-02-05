@@ -1,7 +1,11 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { DB_URL } from '../Constants/Constants';
+import ImagePick from './ImagePick';
+import MyContext from '../MyContext';
+
 
 const AddConference = ({ navigation }) => {
   const [name, setName] = useState();
@@ -18,8 +22,10 @@ const AddConference = ({ navigation }) => {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const [banner, setBanner] = useState();
-  const [logo, setLogo] = useState();
+  const [logo, setLogo] = useState(null);
   const [token, setToken] = useState();
+
+  const {Logo_path, setLogo_path} = useContext(MyContext);
 
   const name1 = useRef();
   const email1 = useRef();
@@ -48,16 +54,17 @@ const AddConference = ({ navigation }) => {
     { key: '7', value: 'NDS-2024' },
   ]
   useEffect(() => {
-  }, [name])
+  }, [name, Logo_path])
 
   const handleCreate = async () => {
     try {
-      var APIURL = "http://192.168.2.117:8000/CreateConference.php";
+      var APIURL = `${DB_URL}CreateConference.php`;
 
       var headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
+      // uploadImage()
 
       var Data = {
         Name: name,
@@ -74,8 +81,8 @@ const AddConference = ({ navigation }) => {
         Latitude: latitude,
         Longitude: longitude,
         Token: token,
+        Logo: Logo_path,
         // Banner : ;
-        // Logo : ;
       };
 
       fetch(APIURL, {
@@ -96,7 +103,7 @@ const AddConference = ({ navigation }) => {
           }
         })
         .catch((error) => {
-          console.error("ERROR FOUND" + error);
+          console.error("ERROR FOUND " + error);
         })
       console.log("data from js ==", Data);
     } catch (error) {
@@ -174,6 +181,10 @@ const AddConference = ({ navigation }) => {
           <View style={styles.inputbox}>
             <TextInput style={styles.textinput} placeholder='Category Type' clearTextOnFocus={true} defaultValue={token} onChangeText={token => setToken(token)} ref={token1} />
           </View>
+          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 20 }}>
+            <Button title="Photo Library" onPress={() => selectImage(true)} />
+            <Button title="Capture Image" onPress={() => selectImage(false)} />
+          </View> */}
 
           {/* <SelectList
             setSelected={(val) => setname(val)}
@@ -182,6 +193,7 @@ const AddConference = ({ navigation }) => {
             placeholder="Select Category"
             defaultValue={name} onChangeText={name => setEmail(name)} ref={name1}
           /> */}
+          <ImagePick />
           <View style={{ marginTop: 25, marginBottom: 40 }}>
             <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleCreate}>
               <Text style={{ color: "#fff", textAlign: "center" }}> Create </Text>

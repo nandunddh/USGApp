@@ -23,6 +23,7 @@ import { Message_data } from '../context';
 import { useNavigation } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import { DB_URL } from '../Constants/Constants';
+import WebLogin from './WebLogin';
 
 
 webBrowser.maybeCompleteAuthSession()
@@ -313,87 +314,90 @@ const Login = () => {
 
   return (
     <SafeAreaProvider>
-
       <ScrollView>
-        <View style={{ flex: 1 }}>
-          {/* <View style={{paddingTop: insets.top, paddingHorizontal: 20 }}> */}
-          <View style={{ paddingHorizontal: 20, }}>
-            <View style={{ alignItems: 'center' }}>
-              <Image source={require('../../assets/logo.png')} />
-            </View>
-
-            <View
-              style={{
-                marginTop: 5,
-                borderTopRightRadius: 30,
-                borderTopLeftRadius: 30,
-              }}
-            >
-              <Text style={styles.firsttext}>Give credential to sign in your account</Text>
-              {/* <Text>{JSON.stringify(userInfo, null, 2)}</Text> */}
-              <View style={styles.inputbox}>
-                <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-                <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
-
+        {Platform.OS == "web" ?
+          <WebLogin />
+          :
+          <View style={{ flex: 1 }}>
+            {/* <View style={{paddingTop: insets.top, paddingHorizontal: 20 }}> */}
+            <View style={{ paddingHorizontal: 20, }}>
+              <View style={{ alignItems: 'center' }}>
+                <Image source={require('../../assets/logo.png')} />
               </View>
-              <View style={styles.inputbox}>
-                <Feather name="lock" size={30} color="black" style={{ marginLeft: 15, alignSelf: "center", flex: 1 }} />
-                <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={false} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword(password)} ref={password1} />
-                {hidePass ?
-                  <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
-                  :
-                  <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
 
-                }
+              <View
+                style={{
+                  marginTop: 5,
+                  borderTopRightRadius: 30,
+                  borderTopLeftRadius: 30,
+                }}
+              >
+                <Text style={styles.firsttext}>Give credential to sign in your account</Text>
+                {/* <Text>{JSON.stringify(userInfo, null, 2)}</Text> */}
+                <View style={styles.inputbox}>
+                  <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
+                  <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
 
+                </View>
+                <View style={styles.inputbox}>
+                  <Feather name="lock" size={30} color="black" style={{ marginLeft: 15, alignSelf: "center", flex: 1 }} />
+                  <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={false} secureTextEntry={hidePass ? true : false} value={password} onChangeText={password => setPassword(password)} ref={password1} />
+                  {hidePass ?
+                    <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+                    :
+                    <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+
+                  }
+
+                </View>
+                <View>
+                  <TouchableOpacity onPress={() =>
+                    navigation.navigate("Reset_Password")}>
+                    <Text style={styles.forgetpassword}>Forget Password?</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{ marginTop: 25, marginBottom: 40 }}>
+                  <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleLogin}>
+                    <Text style={{ color: "#fff", textAlign: "center" }}> SIGN IN </Text>
+                  </TouchableOpacity>
+                  {/* <Button title='SIGN IN' color="#000" /> */}
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: 20, }}>
+              <View style={styles.container}>
+                <View style={styles.horizontalLine} />
+                <Text style={styles.text}> or continue with </Text>
+                <View style={styles.horizontalLine} />
+              </View>
+              <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 40, marginBottom: 50 }}>
+                <View style={styles.logos}>
+                  <FontAwesome5 name="facebook" size={34} color="#1876f2" />
+                </View>
+                <View style={styles.logos}>
+                  <FontAwesome name="google" size={34} color="black" onPress={() => promtAsync()} />
+                </View>
+                <View style={styles.logos}>
+                  <Fontisto name="apple" size={34} color="black" />
+                </View>
               </View>
               <View>
-                <TouchableOpacity onPress={() =>
-                  navigation.navigate("Reset_Password")}>
-                  <Text style={styles.forgetpassword}>Forget Password?</Text>
-                </TouchableOpacity>
+                <Text style={{ textAlign: "center", fontSize: 15, }}> Don't have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
+                  navigation.navigate('Sign_Up')
+                }> Sign Up </Text></Text>
               </View>
-              <View style={{ marginTop: 25, marginBottom: 40 }}>
-                <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleLogin}>
-                  <Text style={{ color: "#fff", textAlign: "center" }}> SIGN IN </Text>
-                </TouchableOpacity>
-                {/* <Button title='SIGN IN' color="#000" /> */}
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: 20, }}>
-            <View style={styles.container}>
-              <View style={styles.horizontalLine} />
-              <Text style={styles.text}> or continue with </Text>
-              <View style={styles.horizontalLine} />
-            </View>
-            <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 40, marginBottom: 50 }}>
-              <View style={styles.logos}>
-                <FontAwesome5 name="facebook" size={34} color="#1876f2" />
-              </View>
-              <View style={styles.logos}>
-                <FontAwesome name="google" size={34} color="black" onPress={() => promtAsync()} />
-              </View>
-              <View style={styles.logos}>
-                <Fontisto name="apple" size={34} color="black" />
-              </View>
-            </View>
-            <View>
-              <Text style={{ textAlign: "center", fontSize: 15, }}> Don't have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
-                navigation.navigate('Sign_Up')
-              }> Sign Up </Text></Text>
-            </View>
-            {/* <Button
+              {/* <Button
                 onPress={() => {
                   AsyncStorage.removeItem('@user')
                 }}
                 title="Remove item"
                 color="red"
               /> */}
+            </View>
           </View>
-        </View>
+        }
       </ScrollView>
-    </SafeAreaProvider>
+    </SafeAreaProvider >
   )
 }
 

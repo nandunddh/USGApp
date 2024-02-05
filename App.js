@@ -34,6 +34,8 @@ import Test from './Components/Test'
 import Verificationcode from './Components/Auth/Verificationcode'
 import New_Password from './Components/Auth/New_Password'
 import MyComponent from './Components/Auth/MyComponent'
+import ImageUpload from './Components/ImageUpload'
+import Conf_update from './Components/AdminScreens/Conf_update'
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
@@ -112,12 +114,14 @@ export default function App() {
 
   // const {isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin} = useContext(Message_data)
 
+  const [Logo_path, setLogo_path] = useState(null);
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   const [storedCredentials, setStoredCredentials] = useState(null);
   const [notificationDesc, setNotificationDesc] = useState(nfData)
   const [time, setTime] = useState([])
+  const [ConferenceData, setConferenceData] = useState([])
   const [user_email, setUser_email] = useState()
 
   const getStoredCredentials = async () => {
@@ -172,16 +176,39 @@ export default function App() {
   //   };
   // }, []);
 
+  const profile = () => {
+    return (
+      <SafeAreaProvider style={{ backgroundColor: "#373a43", height: 90, width: "auto", borderBottomColor: "#373a43 !important", paddingTop: 5 }}>
+        <View>
+          <View style={{ flexDirection: "row", }}>
+            <View>
+              <Image source={require("./assets/favicon.png")} style={{ borderRadius: 25, marginLeft: 10 }} />
+            </View>
+            <View style={{ marginLeft: 15 }}>
+              <Text style={{ color: "#fff" }}> Hi Welcome </Text>
+              {
+                user_email ?
+                <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>{user_email}</Text>
+                :
+                <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>Nandu Kumar</Text>
+              }
+            </View>
+          </View>
+        </View>
+      </SafeAreaProvider>
+    )
+  }
+
   return (
     <SafeAreaProvider>
       <StatusBar style="light" />
       {/*  */}
       <NavigationContainer>
-        <MyContext.Provider value={{ time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, user_email, setUser_email }}>
+        <MyContext.Provider value={{ time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, user_email, setUser_email, Logo_path, setLogo_path, ConferenceData, setConferenceData}}>
           <Stack.Navigator screenOptions={{
             contentStyle: { backgroundColor: "#fff" }
           }}
-          // initialRouteName='MyComponent'
+          initialRouteName='UserTab'
           >
             {/* {(Platform.OS == "ios" || Platform.OS == "web") ? ( */}
             <>
@@ -217,6 +244,7 @@ export default function App() {
                 component={New_Password}
                 options={{ headerTitleAlign: "center", headerShadowVisible: false, headerTitle: "New Password" }}
               />
+              {/* Web screen  */}
               <Stack.Screen
                 name="Web_Tabs"
                 component={WebTabs}
@@ -235,6 +263,8 @@ export default function App() {
                 }}
               // options={{ title: null, headerShown: false}}
               />
+              {/* end */}
+              {/* IOS */}
               <Stack.Screen
                 name="ios_HomeScreen"
                 component={HomeScreen}
@@ -266,6 +296,7 @@ export default function App() {
                   headerShown: false,
                 }}
               />
+              {/* end */}
               <Stack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
@@ -297,12 +328,15 @@ export default function App() {
                   headerShown: false,
                 }}
               />
+              <Stack.Screen name="CreateConference" component={AddConference} />
               <Stack.Screen name="Program" component={Program} />
               <Stack.Screen name="About" component={About} />
               <Stack.Screen name="CurrentConferences" component={CurrentConferences} options={{
                 headerTitle: "October 2023 Conferences"
               }} />
               <Stack.Screen name="test" component={Test} />
+              <Stack.Screen name="Conf_update" component={Conf_update} />
+              <Stack.Screen name="ImageUpload" component={ImageUpload} />
               <Stack.Screen name="Notifications" component={Notification} />
               <Stack.Screen name="Polymers-2023" component={PolymersScreen} />
               <Stack.Screen name="Pdf Screen" component={PdfScreen} />

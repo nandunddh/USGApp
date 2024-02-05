@@ -5,6 +5,8 @@ import Notification from "./Notification"
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Image, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import ImageUpload from '../ImageUpload'
+import Conf_update from '../AdminScreens/Conf_update'
 
 const Tab = createBottomTabNavigator()
 
@@ -56,8 +58,8 @@ const UserTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Events"
-        component={ConferencesList}
+        name="Conf_update"
+        component={Conf_update}
         options={{
           headerTitleAlign: "center",
           headerShadowVisible: false
