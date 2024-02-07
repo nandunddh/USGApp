@@ -419,7 +419,7 @@ const HomeScreen = ({ navigation }) => {
               <ViewSlider
               renderSlides={
                 <>
-                  {popular_conference && popular_conference.map((item, index) => {
+                  {ConferenceData && ConferenceData.map((item, index) => {
                     if (item) {
 
                       const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
@@ -430,8 +430,7 @@ const HomeScreen = ({ navigation }) => {
                             <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", width: width - 20, }}>
                               {item.banner ?
                                 <Image
-                                  source={item.image}
-                                  // source={{ uri: imageUrl }}
+                                  source={{ uri: imageUrl }}
                                   style={{ borderRadius: 15, width: "100%", aspectRatio: 16 / 9 }}
                                 />
                                 : <Text>No Banner</Text>}
@@ -471,7 +470,7 @@ const HomeScreen = ({ navigation }) => {
               }
               style={styles.slider}
               height={410}
-              slideCount={popular_conference.length}
+              slideCount={ConferenceData.length}
               slideInterval={5000}
             />
 
