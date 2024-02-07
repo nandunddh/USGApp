@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Image, TouchableOpacity, Linking, StyleSheet, ScrollView, useWindowDimensions, Dimensions, Button } from 'react-native'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, Linking, StyleSheet, ScrollView, useWindowDimensions, Dimensions, Button, Platform } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 // import Program from "./Program"
 import axios from 'axios'
@@ -17,6 +17,7 @@ import { popular_conferences } from './Data/data';
 import ViewSlider from 'react-native-view-slider';
 import MyContext from './MyContext';
 import { DB_URL } from './Constants/Constants';
+import Swiper from 'react-native-swiper';
 // import UpComingConferences from './UpComingConferences';
 
 const { width } = Dimensions.get('window');
@@ -138,20 +139,26 @@ const HomeScreen = ({ navigation }) => {
       longitude: item.longitude,
     });
   }
-  const HandleUrl = ({ item }) => {
+  const HandleUrl = React.memo(({ item }) => {
+    const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
     const handpleUrlPress = () => {
       // const url = `${item.url}`;
       // Linking.openURL(url);
-      const url = `${item.screenname}`;
+      const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
+      const screenname = "ConferenceScreen";
+      const url = `${screenname}`;
       navigation.navigate(url, {
         name: item.name,
-        title: item.title1,
-        date: item.date,
+        title: item.title,
+        dates: item.dates,
+        month: item.month,
+        year: item.year,
+        price: item.price,
         venu: item.venu,
         url: item.url,
-        image: item.image,
+        image: imageUrl,
         about: item.about,
-        aboutshort: item.aboutShort,
+        aboutshort: item.aboutshort,
         hotelAddress: item.hotelAddress,
         url: item.url,
       });
@@ -159,14 +166,22 @@ const HomeScreen = ({ navigation }) => {
     return (
       <ScrollView>
 
-        {/* <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
-          <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 190 }} />
+        <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", marginHorizontal: 10, width: 310 }}>
+          {item.banner ?
+
+            <Image source={{ uri: imageUrl }} style={{ borderRadius: 15, width: "100%", height: 190 }}
+              onLoadStart={() => console.log('Image loading started')}
+              onLoadEnd={() => console.log('Image loading finished')}
+              onError={(error) => console.log('Image loading error', error)} />
+            :
+            <Text>NO Banner</Text>
+          }
           <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
-          <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
+          <Text style={{ fontSize: 15, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title}</Text>
           <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
             <View style={{ flexDirection: "row", }}>
               <Fontisto name="date" size={16} color="#f66b10" />
-              <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.date}</Text>
+              <Text style={{ fontSize: 12, fontWeight: "600", marginHorizontal: 10, }}>{item.month} {item.dates}, {item.year}</Text>
             </View>
             <View style={{ flexDirection: "row", textAlign: "center" }}>
               <EvilIcons name="location" size={18} color="#f66b10" />
@@ -181,16 +196,13 @@ const HomeScreen = ({ navigation }) => {
               <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
                 <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
               </TouchableOpacity>
-              <Button title='SIGN IN' color="#000" /> 
-            </View>
-            <View>
-              <Text style={{ textAlign: "center" }}>Register Now</Text> 
             </View>
           </View>
-        </View>  */}
+        </View>
       </ScrollView>
     )
   }
+  )
 
   const fetchData = async () => {
     try {
@@ -348,19 +360,8 @@ const HomeScreen = ({ navigation }) => {
   const { search } = state;
   return (
     <ScrollView>
-      <SafeAreaView>
-        {/* <SearchBar
-        placeholder="Type Here..."
-        onChangeText={updateSearch}
-        value={search}
-      /> */}
-        {/* current conferences start */}
-        <View>
-          {/* <View>
-            {ConferenceData.map((conference, index) => (
-              <LiveConferences key={index} conference={conference} />
-            ))}
-          </View> */}
+      {Platform.OS == "web" ?
+        <>
           <View>
             {ConferenceData && ConferenceData.length > 0 && (
               <View key={index} style={{ backgroundColor: "#373a43", paddingHorizontal: 25, flexDirection: "row", justifyContent: "space-between", height: 120, paddingTop: 15 }}>
@@ -373,13 +374,52 @@ const HomeScreen = ({ navigation }) => {
             )
             }
           </View>
-
           <View style={{ marginTop: -60, flexDirection: "row", marginBottom: 30, }}>
+            <FlatList
+              data={ConferenceData}
+              renderItem={({ item }) =>
+                <HandleUrl item={item} />
+              }
+              horizontal
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        </>
+        :
+        <SafeAreaView>
+          {/* <SearchBar
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={search}
+      /> */}
+          {/* current conferences start */}
+          <View>
+            {/* <View>
+            {ConferenceData.map((conference, index) => (
+              <LiveConferences key={index} conference={conference} />
+            ))}
+          </View> */}
+            <View>
+              {ConferenceData && ConferenceData.length > 0 && (
+                <View key={index} style={{ backgroundColor: "#373a43", paddingHorizontal: 25, flexDirection: "row", justifyContent: "space-between", height: 120, paddingTop: 15 }}>
+                  <Text style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>{ConferenceData[0].month} {ConferenceData[0].year} Conferences</Text>
+                  {/* <TouchableOpacity onPress={() => navigation.navigate("CurrentConferences")}>
+                  <Text style={{ textAlign: "right", color: "red" }}> View all</Text>
+                </TouchableOpacity> */}
+                  <Text style={{ textAlign: "right", color: "red" }} onPress={() => navigation.navigate("CurrentConferences")}> View all</Text>
+                </View>
+              )
+              }
+            </View>
 
-            <ViewSlider
+            <View style={{ marginTop: -60, flexDirection: "row", marginBottom: 30, }}>
+
+              <ViewSlider
               renderSlides={
                 <>
-                  {ConferenceData && ConferenceData.map((item, index) => {
+                  {popular_conference && popular_conference.map((item, index) => {
                     if (item) {
 
                       const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
@@ -388,7 +428,13 @@ const HomeScreen = ({ navigation }) => {
                         <View key={index}>
                           <View style={styles.viewBox}>
                             <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", width: width - 20, }}>
-                              <Image source={{url: imageUrl}} style={{ borderRadius: 15, width: "100%", height: 225 }} />
+                              {item.banner ?
+                                <Image
+                                  source={item.image}
+                                  // source={{ uri: imageUrl }}
+                                  style={{ borderRadius: 15, width: "100%", aspectRatio: 16 / 9 }}
+                                />
+                                : <Text>No Banner</Text>}
                               <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
                               <Text style={{ fontSize: 17, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
                               <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
@@ -411,13 +457,8 @@ const HomeScreen = ({ navigation }) => {
                                       <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>Program </Text>
                                     </TouchableOpacity>
                                   }
-                                  {/* <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 10 }} onPress={handpleUrlPress}>
-                              <Text style={{ color: "#fff", textAlign: "center" }}> Submit Abstract </Text>
-                            </TouchableOpacity> */}
-                                  {/* <Button title='SIGN IN' color="#000" /> */}
                                 </View>
                                 <View>
-                                  {/* <Text style={{ textAlign: "center" }}>Register Now</Text> */}
                                 </View>
                               </View>
                             </View>
@@ -428,18 +469,14 @@ const HomeScreen = ({ navigation }) => {
                   })}
                 </>
               }
-              style={styles.slider}     //Main slider container style
-              height={410}    //Height of your slider
-              slideCount={ConferenceData.length}    //How many views you are adding to slide
-              // dots={true}     // Pagination dots visibility true for visibile 
-              // dotActiveColor='red'     //Pagination dot active color
-              // dotInactiveColor='gray'    // Pagination do inactive color
-              // dotsContainerStyle={styles.dotContainer}     // Container style of the pagination dots
-              autoSlide={true}    //The views will slide automatically
-              slideInterval={5000}    //In Miliseconds
+              style={styles.slider}
+              height={410}
+              slideCount={popular_conference.length}
+              slideInterval={5000}
             />
-            {/* <HandleUrl item={popular_conference} /> */}
-            {/* <FlatList
+
+              {/* <HandleUrl item={popular_conference} /> */}
+              {/* <FlatList
           data={popular_conference}
           renderItem={({ item }) =>
             <HandleUrl item={item} />
@@ -448,57 +485,57 @@ const HomeScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         /> */}
-          </View>
+            </View>
 
-          {/* current conferences end */}
-          {/* Up coming conferences start */}
+            {/* current conferences end */}
+            {/* Up coming conferences start */}
 
-          <View>
             <View>
-              <Text style={styles.header2}>Coming Conferences</Text>
-            </View>
-            <View>
-              {ConferenceData.map((conference, index) => (
-                <UpComingConferences key={index} conference={conference} />
-              ))}
-            </View>
-          </View>
-          {/* Up coming conferences end */}
-          {/* conferences 2024 start */}
-          <View>
-            <View>
-              <Text style={styles.header2}>Conferences 2024</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <ConferencesList />
-              {/* <List /> */}
-            </View>
-          </View>
-          {/* conferences 2024 ends */}
-          {/* ABout */}
-          <View>
-            {/* <Text>Getting Data email</Text> */}
-          </View>
-          <ScrollView>
-            <View style={{ backgroundColor: "#fff", paddingVertical: 10, height: "100%" }}>
-              <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>About USG</Text>
-              <View style={{ alignItems: 'center' }}>
-                <Image source={require('../assets/logo.png')} />
-                <View style={{ marginHorizontal: 15, }}>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    <Text style={{ fontWeight: "bold" }}>United Scientific Group (USG)</Text> is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States.
-                    {"\n"}
-                  </Text>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    USG's primary goal is to establish scientific networking platforms through conferences. These platforms aim to bridge the gap between research and business, facilitating the translation of scientific discoveries and innovative ideas into practical solutions and products for the betterment of humanity.
-                    {"\n"}
-                  </Text>
-                  <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
-                    USG is governed by a board of directors comprising renowned scientists. Their dedication lies in supporting the scientific community by providing exceptional services in organizing scientific conferences and open access scientific publications.
-                  </Text>
-                </View>
+              <View>
+                <Text style={styles.header2}>Coming Conferences</Text>
               </View>
-              {/* <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "green", alignItems: "stretch", flexDirection: "row"}}>
+              <View>
+                {ConferenceData.map((conference, index) => (
+                  <UpComingConferences key={index} conference={conference} />
+                ))}
+              </View>
+            </View>
+            {/* Up coming conferences end */}
+            {/* conferences 2024 start */}
+            <View>
+              <View>
+                <Text style={styles.header2}>Conferences 2024</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <ConferencesList />
+                {/* <List /> */}
+              </View>
+            </View>
+            {/* conferences 2024 ends */}
+            {/* ABout */}
+            <View>
+              {/* <Text>Getting Data email</Text> */}
+            </View>
+            <ScrollView>
+              <View style={{ backgroundColor: "#fff", paddingVertical: 10, height: "100%" }}>
+                <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>About USG</Text>
+                <View style={{ alignItems: 'center' }}>
+                  <Image source={require('../assets/logo.png')} />
+                  <View style={{ marginHorizontal: 15, }}>
+                    <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                      <Text style={{ fontWeight: "bold" }}>United Scientific Group (USG)</Text> is a scientific event organizer and publisher founded in 2014 in San Jose, CA. In 2016, it relocated to Plano, TX. USG is known for organizing national and international scientific conferences with participant numbers ranging from 50 to 350. It holds tax-exempt status under Section 501c3 of the Internal Revenue Service in the United States.
+                      {"\n"}
+                    </Text>
+                    <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                      USG's primary goal is to establish scientific networking platforms through conferences. These platforms aim to bridge the gap between research and business, facilitating the translation of scientific discoveries and innovative ideas into practical solutions and products for the betterment of humanity.
+                      {"\n"}
+                    </Text>
+                    <Text style={{ fontSize: 18, textAlign: "justify", lineHeight: 25 }}>
+                      USG is governed by a board of directors comprising renowned scientists. Their dedication lies in supporting the scientific community by providing exceptional services in organizing scientific conferences and open access scientific publications.
+                    </Text>
+                  </View>
+                </View>
+                {/* <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "green", alignItems: "stretch", flexDirection: "row"}}>
             <View style={{ flexDirection: "row", padding: 10 }}>
               <MaterialIcons name="keyboard-voice" size={24} color="white" />
               <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold", paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
@@ -510,105 +547,106 @@ const HomeScreen = ({ navigation }) => {
               <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold", justifyContent: "flex-end" }}>79</Text>
             </View>
           </View> */}
-              <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "#86bc42", }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialIcons name="keyboard-voice" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        CONFERENCES
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        By Our Experienced Team
-                      </Text>
-                    </View>
+                <View style={{ marginVertical: 10, marginHorizontal: 10, backgroundColor: "#86bc42", }}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                      <MaterialIcons name="keyboard-voice" size={45} color="white" />
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                          CONFERENCES
+                        </Text>
+                        <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                          By Our Experienced Team
+                        </Text>
+                      </View>
 
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>79</Text>
-                  </View>
-                </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialCommunityIcons name="account-outline" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        SPEAKERS
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        Keynotes, Featured Speakers
-                      </Text>
+                    </View>
+                    <View style={{ padding: 10, justifyContent: "center" }}>
+                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>79</Text>
                     </View>
                   </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>3547</Text>
+                  <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
                   </View>
-                </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <MaterialCommunityIcons name="briefcase-outline" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        PARTNERS
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        We Provides All Industry Services
-                      </Text>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                      <MaterialCommunityIcons name="account-outline" size={45} color="white" />
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                          SPEAKERS
+                        </Text>
+                        <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                          Keynotes, Featured Speakers
+                        </Text>
+                      </View>
                     </View>
+                    <View style={{ padding: 10, justifyContent: "center" }}>
+                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>3547</Text>
+                    </View>
+                  </View>
+                  <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
+                  </View>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                      <MaterialCommunityIcons name="briefcase-outline" size={45} color="white" />
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                          PARTNERS
+                        </Text>
+                        <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                          We Provides All Industry Services
+                        </Text>
+                      </View>
 
-                  </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>56</Text>
-                  </View>
-                </View>
-                <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
-                    <SimpleLineIcons name="globe-alt" size={45} color="white" />
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
-                        COUNTRIES
-                      </Text>
-                      <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
-                        We are in All Continents
-                      </Text>
                     </View>
-
+                    <View style={{ padding: 10, justifyContent: "center" }}>
+                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>56</Text>
+                    </View>
                   </View>
-                  <View style={{ padding: 10, justifyContent: "center" }}>
-                    <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>75</Text>
+                  <View style={{ borderWidth: 1, marginHorizontal: 30, borderColor: "#ffffff1a" }}>
+                  </View>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={{ flexDirection: "row", padding: 10, justifyContent: "flex-end" }}>
+                      <SimpleLineIcons name="globe-alt" size={45} color="white" />
+                      <View style={{ flexDirection: "column" }}>
+                        <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", paddingLeft: 5, }}>
+                          COUNTRIES
+                        </Text>
+                        <Text style={{ color: "#fff", fontSize: 15, paddingLeft: 5, justifyContent: "flex-end", textAlign: "right" }}>
+                          We are in All Continents
+                        </Text>
+                      </View>
+
+                    </View>
+                    <View style={{ padding: 10, justifyContent: "center" }}>
+                      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "600", justifyContent: "flex-end" }}>75</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ backgroundColor: "#373a43", borderTopLeftRadius: 80, borderTopEndRadius: 80, }}>
+                  <View>
+                    <View style={{ borderTopWidth: 5, borderColor: "#fff", marginTop: 12, height: 1, marginHorizontal: 150, borderRadius: 50 }}>
+                      {/* <Text>-------------</Text> */}
+                    </View>
+                  </View>
+                  <View style={{ backgroundColor: "#373a43", flexDirection: "row", paddingVertical: 20, paddingHorizontal: 10, justifyContent: "space-evenly", borderTopLeftRadius: 60, borderTopEndRadius: 60, }}>
+
+                    <View style={{ backgroundColor: "#f66b10", borderRadius: 60, paddingHorizontal: 5 }}>
+                      <Zocial name="call" size={45} color="white" onPress={() => { Linking.openURL(`tel:+1-469-854-2280/81`) }} />
+                    </View>
+                    <View style={{ backgroundColor: "#fbbf47", borderRadius: 60, padding: 5 }}>
+                      <MaterialCommunityIcons name="email-outline" size={48} color="white" onPress={() => { Linking.openURL(`mailto:contact@unitedscientificgroup.net`) }} />
+                    </View>
+                    <View style={{ backgroundColor: "#3f82f7", borderRadius: 60, padding: 5 }}>
+                      {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
+                      <FontAwesome5 name="globe" size={45} color="white" onPress={() => { Linking.openURL("https://unitedscientificgroup.org") }} />
+                    </View>
                   </View>
                 </View>
               </View>
-              <View style={{ backgroundColor: "#373a43", borderTopLeftRadius: 80, borderTopEndRadius: 80, }}>
-                <View>
-                  <View style={{ borderTopWidth: 5, borderColor: "#fff", marginTop: 12, height: 1, marginHorizontal: 150, borderRadius: 50 }}>
-                    {/* <Text>-------------</Text> */}
-                  </View>
-                </View>
-                <View style={{ backgroundColor: "#373a43", flexDirection: "row", paddingVertical: 20, paddingHorizontal: 10, justifyContent: "space-evenly", borderTopLeftRadius: 60, borderTopEndRadius: 60, }}>
-
-                  <View style={{ backgroundColor: "#f66b10", borderRadius: 60, paddingHorizontal: 5 }}>
-                    <Zocial name="call" size={45} color="white" onPress={() => { Linking.openURL(`tel:+1-469-854-2280/81`) }} />
-                  </View>
-                  <View style={{ backgroundColor: "#fbbf47", borderRadius: 60, padding: 5 }}>
-                    <MaterialCommunityIcons name="email-outline" size={48} color="white" onPress={() => { Linking.openURL(`mailto:contact@unitedscientificgroup.net`) }} />
-                  </View>
-                  <View style={{ backgroundColor: "#3f82f7", borderRadius: 60, padding: 5 }}>
-                    {/* <MaterialCommunityIcons name="directions" size={50} color="white" /> */}
-                    <FontAwesome5 name="globe" size={45} color="white" onPress={() => { Linking.openURL("https://unitedscientificgroup.org") }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-      </SafeAreaView >
+            </ScrollView>
+          </View>
+        </SafeAreaView >
+      }
 
     </ScrollView>
   );
@@ -717,5 +755,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     position: 'absolute',
     // bottom: 15
-  }
+  },
+  wrapper: {},
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
 })

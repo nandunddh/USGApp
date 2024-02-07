@@ -42,7 +42,7 @@ const Login = () => {
   //   email: "",
   //   password: "",
   // });
-  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email } = useContext(MyContext)
+  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email, user_name, setUser_name } = useContext(MyContext)
 
   // const handleChange = (event = {}) => {
   //   const name = event.target && event.target.name;
@@ -66,14 +66,11 @@ const Login = () => {
       handleSignInWithGoogle();
     }
     // console.log("Data = ", response);
-    // if(email !== ""){
-    //   handleLogin()
-    // }
     // SplashScreen.hide();
 
     getStoredCredentials();
     console.log("isLogin from login === ", isAdmin)
-  }, [response, isLogin, isAdmin, email, storedCredentials])
+  }, [response, isLogin, isAdmin, email, storedCredentials, user_name])
 
   // async function handleSignInWithGoogle() {
   //   const user = await AsyncStorage.getItem('@user')
@@ -246,32 +243,35 @@ const Login = () => {
         })
           .then((Response) => Response.json())
           .then((Response) => {
-            // console.log("Login ===", Response);
+            console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
-              // console.log("Login", Response)
+              console.log("Login", Response)
               // console.log("Login true =============")
-              if (Platform.OS == "web") {
-                if ((Response[0].IsAdmin) == "true") {
-                  alert("Admin Login!");
-                  setUser_email(email)
-                  console.log("Admin Login from DB : ", Response[0].IsAdmin);
-                  navigation.navigate('WebAdminTab', {
-                    screen: 'HomeScreen',
-                  });
-                  setIsAdmin(Response[0].IsAdmin);
-                  // storeCredentials()
-                }
-                else {
-                  alert(Response[0].Message);
-                  setUser_email(email)
-                  navigation.navigate('Web_Tabs', {
-                    screen: 'HomeScreen',
-                  });
-                }
-              }
-              else {
-                storeCredentials()
-              }
+              // if (Platform.OS == "web") {
+              //   if ((Response[0].IsAdmin) == "true") {
+              //     alert("Admin Login!");
+              //     setUser_email(email)
+              //     console.log("Admin Login from DB : ", Response[0].IsAdmin);
+              //     navigation.navigate('WebAdminTab', {
+              //       screen: 'HomeScreen',
+              //     });
+              //     setIsAdmin(Response[0].IsAdmin);
+              //     // storeCredentials()
+              //   }
+              //   else {
+              //     alert(Response[0].Message);
+              //     setUser_email(email)
+              //     navigation.navigate('Web_Tabs', {
+              //       screen: 'HomeScreen',
+              //     });
+              //   }
+              // }
+              // else {
+              //   storeCredentials()
+              // }
+              alert(Response[0].Message);
+              setUser_name(Response[0].User_Name)
+              storeCredentials()
             }
             else {
               alert(Response[0].Message);
@@ -292,21 +292,6 @@ const Login = () => {
         alert("Fetch Error!")
       }
     }
-    // else {
-    //   if (email === "nandu@test.com") {
-    //     // navigation.navigate('HomeScreen');
-    //     storeCredentials()
-    //     navigation.navigate('UserTab', {
-    //       screen: 'HomeScreen',
-    //     });
-    //   }
-    //   else if (email === "admin@test.com") {
-    //     storeCredentials()
-    //     navigation.navigate('AdminTab', {
-    //       screen: 'HomeScreen',
-    //     });
-    //   }
-    // }
     console.log("input email = ", email);
     console.log("input password = ", password);
 

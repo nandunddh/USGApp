@@ -14,7 +14,6 @@ import ResetPassword from './Components/Auth/ResetPassword'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import CurrentConferences from './Components/Screen/CurrentConferences'
 import Notification from './Components/Tabs/Notification'
-import AdminNotification from './Components/AdminScreens/AdminNotification'
 import * as Device from 'expo-device';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
@@ -33,7 +32,6 @@ import WebAdminTabs from './Components/OS(platform)/Web/WebAdminTabs'
 import Test from './Components/Test'
 import Verificationcode from './Components/Auth/Verificationcode'
 import New_Password from './Components/Auth/New_Password'
-import MyComponent from './Components/Auth/MyComponent'
 import ImageUpload from './Components/ImageUpload'
 import Conf_update from './Components/AdminScreens/Conf_update'
 const Tab = createBottomTabNavigator()
@@ -112,17 +110,15 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  // const {isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin} = useContext(Message_data)
-
   const [Logo_path, setLogo_path] = useState(null);
   const [isLogin, setIsLogin] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isNotification, setIsNotification] = useState(false)
   const [storedCredentials, setStoredCredentials] = useState(null);
-  const [notificationDesc, setNotificationDesc] = useState(nfData)
   const [time, setTime] = useState([])
   const [ConferenceData, setConferenceData] = useState([])
   const [user_email, setUser_email] = useState()
+  const [user_name, setUser_name] = useState()
 
   const getStoredCredentials = async () => {
     try {
@@ -145,17 +141,13 @@ export default function App() {
   }
 
   useEffect(() => {
-    console.log("isLogin", isLogin);
-    console.log("isAdmin", isAdmin);
     if (Platform.OS === 'ios') {
-      // Your code is running on iOS.
       console.log('Running on iOS');
     } else if (Platform.OS === 'android') {
-      // Your code is running on Android.
       console.log('Running on Android');
     }
     getStoredCredentials()
-  }, [isLogin, isAdmin, storedCredentials])
+  }, [isLogin, isAdmin, storedCredentials, user_name])
 
 
 
@@ -187,10 +179,10 @@ export default function App() {
             <View style={{ marginLeft: 15 }}>
               <Text style={{ color: "#fff" }}> Hi Welcome </Text>
               {
-                user_email ?
-                <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>{user_email}</Text>
-                :
-                <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>Nandu Kumar</Text>
+                user_name ?
+                  <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>{user_name}</Text>
+                  :
+                  <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>Nandu Kumar</Text>
               }
             </View>
           </View>
@@ -204,11 +196,11 @@ export default function App() {
       <StatusBar style="light" />
       {/*  */}
       <NavigationContainer>
-        <MyContext.Provider value={{ time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, user_email, setUser_email, Logo_path, setLogo_path, ConferenceData, setConferenceData}}>
+        <MyContext.Provider value={{ time, setTime, isNotification, setIsNotification, isAdmin, setIsAdmin, storedCredentials, setStoredCredentials, isLogin, setIsLogin, user_email, setUser_email, Logo_path, setLogo_path, ConferenceData, setConferenceData, user_name, setUser_name }}>
           <Stack.Navigator screenOptions={{
             contentStyle: { backgroundColor: "#fff" }
           }}
-          initialRouteName='UserTab'
+          // initialRouteName='UserTab'
           >
             {/* {(Platform.OS == "ios" || Platform.OS == "web") ? ( */}
             <>
