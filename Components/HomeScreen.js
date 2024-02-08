@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Image, TouchableOpacity, Linking, StyleSheet, ScrollView, useWindowDimensions, Dimensions, Button, Platform } from 'react-native'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, Linking, StyleSheet, ScrollView, useWindowDimensions, Dimensions, Button, Platform, FlatList } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 // import Program from "./Program"
 import axios from 'axios'
@@ -14,10 +14,12 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import ConferencesList from "./Tabs/ConferencesList"
 // import { notificationData, popular_conferences, upcomingConferencelist } from './Data/data';
 import { popular_conferences } from './Data/data';
-import ViewSlider from 'react-native-view-slider';
+// import ViewSlider from 'react-native-view-slider';
 import MyContext from './MyContext';
 import { DB_URL } from './Constants/Constants';
 import Swiper from 'react-native-swiper';
+import ViewSlider from 'react-native-view-slider'
+import UpComming from './UpComming';
 // import UpComingConferences from './UpComingConferences';
 
 const { width } = Dimensions.get('window');
@@ -31,6 +33,7 @@ const HomeScreen = ({ navigation }) => {
   const url =
     'https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}'
   const [Plenary, setPlenary] = useState([])
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const [Keynote, setKeynote] = useState([])
   const [program, setProgram] = useState(false)
   const [user, setUsers] = useState()
@@ -42,6 +45,18 @@ const HomeScreen = ({ navigation }) => {
   const popular_conference = popular_conferences;
 
   const { isAdmin, isLogin, ConferenceData, setConferenceData } = useContext(MyContext)
+
+  const [selectedMonth, setSelectedMonth] = useState(null);
+
+  const renderMonthContent = (month) => {
+    // Customize the content for each month here
+    return (
+      <View style={styles.monthContent}>
+        <Text style={styles.monthText}>{month}</Text>
+        {/* Add other content for the month */}
+      </View>
+    );
+  };
 
   useEffect(() => {
     // fetchDatatest()
@@ -336,9 +351,9 @@ const HomeScreen = ({ navigation }) => {
             <Text style={{ fontWeight: "600", fontSize: 17 }}>{conference.name} {"\n"}
               <View>
                 <Text style={{ fontWeight: "normal", fontSize: 13, marginTop: 4, }}>{conference.month} {conference.dates}, {conference.year}
-                  <Text style={{ color: "#f66b10", fontSize: 15, fontWeight: "bold" }}> | </Text>
-                  <Text style={{ paddingLeft: 13 }}>{conference.venu}</Text>
+                  {/* <Text style={{ color: "#f66b10", fontSize: 15, fontWeight: "bold" }}> | </Text> */}
                 </Text>
+                <Text>{conference.venu}</Text>
               </View>
             </Text>
           </View>
@@ -417,23 +432,72 @@ const HomeScreen = ({ navigation }) => {
             <View style={{ marginTop: -60, flexDirection: "row", marginBottom: 30, }}>
 
               <ViewSlider
-              renderSlides={
-                <>
-                  {ConferenceData && ConferenceData.map((item, index) => {
-                    if (item) {
+                renderSlides={
+                  <>
+                    {ConferenceData && ConferenceData.map((item, index) => {
+                      if (item && item.token == "live") {
 
-                      const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
+                        const imageUrl = `${DB_URL}uploads/banners/${item.banner}`;
 
+                        return (
+                          <View key={index}>
+                            <View style={styles.viewBox}>
+                              <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", width: width - 20, }}>
+                                {item.banner ?
+                                  <Image
+                                    source={{ uri: imageUrl }}
+                                    style={{ borderRadius: 15, width: "100%", aspectRatio: 16 / 9 }}
+                                  />
+                                  : <Text>No Banner</Text>}
+                                <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
+                                <Text style={{ fontSize: 17, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title}</Text>
+                                <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
+                                  <View style={{ flexDirection: "row", }}>
+                                    <Fontisto name="date" size={18} color="#f66b10" />
+                                    <Text style={{ fontSize: 15, fontWeight: "600", marginHorizontal: 10, }}>{item.month} {item.dates}, {item.year}</Text>
+                                  </View>
+                                  <View style={{ flexDirection: "row", textAlign: "center" }}>
+                                    <EvilIcons name="location" size={20} color="#f66b10" />
+                                    <Text style={{ fontSize: 15, fontWeight: "600" }}>{item.venu}</Text>
+                                  </View>
+                                </View>
+                                <View>
+                                  <View style={{ marginVertical: 10, flexDirection: "row", justifyContent: "center", marginHorizontal: 10 }}>
+                                    <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 12, paddingHorizontal: 20 }} onPress={() => { handpleUrlPress({ item }) }}>
+                                      <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}> Register Now </Text>
+                                    </TouchableOpacity>
+                                    {program &&
+                                      <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "green", paddingVertical: 12, paddingHorizontal: 20, marginLeft: 10 }} onPress={() => { handpleUrlPress({ item }) }}>
+                                        <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>Program </Text>
+                                      </TouchableOpacity>
+                                    }
+                                  </View>
+                                  <View>
+                                  </View>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        )
+                      }
+                    })}
+                  </>
+                }
+                style={styles.slider}
+                height={410}
+                slideCount={ConferenceData.length}
+                slideInterval={5000}
+              />
+
+              {/* <ViewSlider
+                renderSlides={
+                  <>
+                    {popular_conferences && popular_conferences.map((item, index) => {
                       return (
                         <View key={index}>
                           <View style={styles.viewBox}>
                             <View style={{ borderWidth: 10, borderColor: "#fff", borderRadius: 15, backgroundColor: "#fff", width: width - 20, }}>
-                              {item.banner ?
-                                <Image
-                                  source={{ uri: imageUrl }}
-                                  style={{ borderRadius: 15, width: "100%", aspectRatio: 16 / 9 }}
-                                />
-                                : <Text>No Banner</Text>}
+                              <Image source={item.image} style={{ borderRadius: 15, width: "100%", height: 225 }} />
                               <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>{item.name}</Text>
                               <Text style={{ fontSize: 17, fontWeight: "600", textAlign: 'center', color: "#f66b10" }}>{item.title1}</Text>
                               <View style={{ flexDirection: "row", marginVertical: 12, justifyContent: "center" }}>
@@ -464,15 +528,19 @@ const HomeScreen = ({ navigation }) => {
                           </View>
                         </View>
                       )
-                    }
-                  })}
-                </>
-              }
-              style={styles.slider}
-              height={410}
-              slideCount={ConferenceData.length}
-              slideInterval={5000}
-            />
+                    })}
+                  </>
+                }
+                style={styles.slider}     //Main slider container style
+                height={410}    //Height of your slider
+                slideCount={popular_conference.length}    //How many views you are adding to slide
+                // dots={true}     // Pagination dots visibility true for visibile 
+                // dotActiveColor='red'     //Pagination dot active color
+                // dotInactiveColor='gray'    // Pagination do inactive color
+                // dotsContainerStyle={styles.dotContainer}     // Container style of the pagination dots
+                autoSlide={true}    //The views will slide automatically
+                slideInterval={5000}    //In Miliseconds
+              /> */}
 
               {/* <HandleUrl item={popular_conference} /> */}
               {/* <FlatList
@@ -506,7 +574,8 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={styles.header2}>Conferences 2024</Text>
               </View>
               <View style={{ flex: 1 }}>
-                <ConferencesList />
+                {/* <ConferencesList /> */}
+                <UpComming />
                 {/* <List /> */}
               </View>
             </View>
@@ -712,9 +781,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   itemContainer: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+
+  },
+  flat_container: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    backgroundColor: '#fff',
+  },
+  itemText: {
+    backgroundColor: '#f66b10',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    color: '#fff',
+    borderRadius: 35,
+    fontSize: 15,
   },
   itemTitle: {
     flex: 1,
@@ -754,15 +837,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     position: 'absolute',
     // bottom: 15
-  },
-  wrapper: {},
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
   },
 })

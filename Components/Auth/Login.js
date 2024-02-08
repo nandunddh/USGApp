@@ -203,7 +203,7 @@ const Login = () => {
         screen: 'HomeScreen',
       });
       // navigation.navigate("HomeScreen");
-      console.log('Credentials stored successfully. And Isadmin = ', isAdminString);
+      console.log('Credentials stored successfully');
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
