@@ -46,63 +46,10 @@ const WebLogin = () => {
   useEffect(() => {
     console.log("width = ", width);
     if (response?.type === 'success') {
-      handleSignInWithGoogle();
+      // handleSignInWithGoogle();
     }
-    getStoredCredentials();
     console.log("isLogin from login === ", isAdmin)
-  }, [response, isLogin, isAdmin, email, storedCredentials, width])
-
-  const getStoredCredentials = async () => {
-    try {
-      const storedEmail = await SecureStore.getItemAsync('email');
-      const storedPassword = await SecureStore.getItemAsync('password');
-      // const storedisAdmin = await SecureStore.getItemAsync('isAdmin');
-      if (storedEmail && storedPassword) {
-        setStoredCredentials({ email: storedEmail, password: storedPassword });
-        if (storedEmail === "nandu@test.com") {
-          // navigation.navigate('HomeScreen');
-          navigation.navigate('UserTab', {
-            screen: 'HomeScreen',
-          });
-        }
-        else if (storedEmail === "admin@test.com") {
-          navigation.navigate('AdminTab', {
-            screen: 'HomeScreen',
-          });
-        }
-        // setIsLogin(true);
-        // if (storedisAdmin === "true") {
-        //   setIsAdmin(true);
-        // }
-        // {storeCredentials && 
-        // navigation.navigate("") }
-
-        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
-      } else {
-        console.log('No credentials found.');
-      }
-    } catch (error) {
-      console.error('Error retrieving credentials:', error);
-    }
-  }
-
-  // Function to store credentials
-  const storeCredentials = async () => {
-    try {
-      const emailString = String(email);
-      const passwordString = String(password);
-      // const isAdminString = String(isAdmin);
-      await SecureStore.setItemAsync('email', emailString);
-      await SecureStore.setItemAsync('password', passwordString);
-      // getStoredCredentials()
-      navigation.navigate('UserTab', {
-        screen: 'HomeScreen',
-      });
-      console.log('Credentials stored successfully. And Isadmin = ', isAdminString);
-    } catch (error) {
-      console.error('Error storing credentials:', error);
-    }
-  }
+  }, [response, isLogin, isAdmin, email, width])
 
 
   const handleLogin = async () => {
@@ -142,7 +89,7 @@ const WebLogin = () => {
                 alert("Admin Login!");
                 setUser_email(email)
                 console.log("Admin Login from DB : ", Response[0].IsAdmin);
-                navigation.navigate('WebAdminTab', {
+                navigation.navigate('AdminTab', {
                   screen: 'HomeScreen',
                 });
                 setIsAdmin(Response[0].IsAdmin);

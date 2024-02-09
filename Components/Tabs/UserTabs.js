@@ -3,7 +3,7 @@ import AddConference from "../AdminScreens/AddConference"
 import HomeScreen from "../HomeScreen"
 import Notification from "./Notification"
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Image, Text, View } from 'react-native'
+import { Image, Platform, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import ImageUpload from '../ImageUpload'
 import Conf_update from '../AdminScreens/Conf_update'
@@ -31,67 +31,101 @@ const UserTabs = () => {
   }
   return (
     <Tab.Navigator>
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          headerTitle: null,
-          title: " ",
-          headerShadowVisible: false,
-          headerLeft: () => (profile()), headerStyle: {
-            backgroundColor: "#373a43",
-          },
-          headerStyle: {
-            backgroundColor: "#373a43"
-          }
-        }}
-      />
-      <Tab.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
+      {Platform.OS == "web" ?
+        <>
+          <Tab.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              headerTitle: null,
+              title: " ",
+              headerShadowVisible: false,
+              headerLeft: () => (profile()), headerStyle: {
+                backgroundColor: "#373a43",
+              },
+              headerStyle: {
+                backgroundColor: "#373a43"
+              }
+            }}
+          />
+          <Tab.Screen
+            name="CreateConference"
+            component={AddConference}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
 
 
-        }}
-      />
-      <Tab.Screen
-        name="Conf_update"
-        component={Conf_update}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
+            }}
+          />
+        </>
+        :
+        <>
+          <Tab.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              headerTitle: null,
+              title: " ",
+              headerShadowVisible: false,
+              headerLeft: () => (profile()), headerStyle: {
+                backgroundColor: "#373a43",
+              },
+              headerStyle: {
+                backgroundColor: "#373a43"
+              }
+            }}
+          />
+          <Tab.Screen
+            name="Notification"
+            component={Notification}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
 
 
-        }}
-      />
-      <Tab.Screen
-        name="CreateConference"
-        component={AddConference}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="Conf_update"
+            component={Conf_update}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
 
 
-        }}
-      />
-      <Tab.Screen
-        name="List"
-        component={ConferencesList}
-        options={{
-          headerTitleAlign: "center",
-          headerShadowVisible: false
-          // headerShown: false,
+            }}
+          />
+          <Tab.Screen
+            name="CreateConference"
+            component={AddConference}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
 
 
-        }}
-      />
-      {/* <Tab.Screen name="Program" component={Program}/> */}
-    </Tab.Navigator>
+            }}
+          />
+          <Tab.Screen
+            name="List"
+            component={ConferencesList}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
+
+
+            }}
+          />
+          {/* <Tab.Screen name="Program" component={Program}/> */}
+        </>
+      }
+    </Tab.Navigator >
+
   )
 }
 export default UserTabs

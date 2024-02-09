@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Image, Text, View } from "react-native";
 import MyContext from "../../MyContext";
 import { useContext } from "react";
+import HomeScreen from "../../HomeScreen";
 
 
 const Tab = createBottomTabNavigator()
@@ -33,7 +34,7 @@ const WebTabs = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="HomeScreen"
-        component={WebHomeScreen}
+        component={HomeScreen}
         options={{
           headerTitle: null,
           title: " ",

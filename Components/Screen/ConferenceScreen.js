@@ -1,4 +1,4 @@
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, Dimensions } from 'react-native'
 import React from 'react'
 import { Image } from 'react-native'
 import { useState } from 'react';
@@ -12,14 +12,19 @@ import { ScrollView } from 'react-native';
 // import MapView from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking } from 'react-native';
+const { height: screenHeight } = Dimensions.get('window');
 
 
 const ConferenceScreen = ({ route, navigation }) => {
   const insets = useSafeAreaInsets();
-  console.log("Screen === ", route);
+  // console.log("Screen === ", route.params.image);
   const [name, setName] = useState(route.params.name);
   const [title, setTitle] = useState(route.params.title);
   const [image, setImage] = useState(route.params.image);
+  const [month, setMonth] = useState(route.params.month);
+  const [dates, setDates] = useState(route.params.dates);
+  const [price, setPrice] = useState(route.params.price);
+  const [year, setYear] = useState(route.params.year);
   const [venu, setVenu] = useState(route.params.venu);
   const [date, setDate] = useState(route.params.date);
   const [logo, setLogo] = useState(route.params.logo);
@@ -31,7 +36,8 @@ const ConferenceScreen = ({ route, navigation }) => {
   return (
     <SafeAreaProvider >
       <ScrollView>
-        {(Platform.OS == "ios") || (Platform.OS == "web") ? <>
+        {(Platform.OS == "ios") || (Platform.OS == "web") ? 
+        <>
           <View>
             <View>
               <Image source={image} style={Styles.image} />
@@ -53,12 +59,12 @@ const ConferenceScreen = ({ route, navigation }) => {
                   </View>
                   <View style={Styles.iconText}>
                     <Fontisto name="date" size={20} color="#a6a3a3" style={[Styles.icon, { marginRight: 5, marginLeft: 5 }]} />
-                    <Text style={Styles.boldtextDate}>{date}</Text>
+                    <Text style={Styles.boldtextDate}>{month} {dates},{year}</Text>
                   </View>
                   <View style={Styles.iconText}>
                     <View style={{ flexDirection: "row" }}>
                       <Entypo name="ticket" size={25} color="#a6a3a3" style={[Styles.icon, { marginRight: 2, marginStart: 5 }]} />
-                      <Text style={{ fontSize: 15 }}>From <Text style={Styles.boldtextDate}>${100}</Text></Text>
+                      <Text style={{ fontSize: 15 }}>From <Text style={Styles.boldtextDate}>${price}</Text></Text>
                     </View>
                   </View>
                   <View style={{ backgroundColor: "#393c45", marginHorizontal: 80, borderRadius: 5 }}>
@@ -142,7 +148,7 @@ const ConferenceScreen = ({ route, navigation }) => {
           <>
             <View style={{ paddingTop: insets.top }}>
               <View>
-                <Image source={image} style={Styles.image} />
+                <Image source={{uri: image}} style={Styles.image} />
               </View>
               <View style={{ backgroundColor: "#fff", top: 8 }}>
                 <View style={{ paddingHorizontal: 10, }}>
@@ -161,7 +167,7 @@ const ConferenceScreen = ({ route, navigation }) => {
                     </View>
                     <View style={Styles.iconText}>
                       <Fontisto name="date" size={20} color="#a6a3a3" style={[Styles.icon, { marginRight: 5, marginLeft: 5 }]} />
-                      <Text style={Styles.boldtextDate}>{date}</Text>
+                      <Text style={Styles.boldtextDate}>{month} {dates}, {year}</Text>
                     </View>
                     <View style={Styles.iconText}>
                       <View style={{ flexDirection: "row" }}>
@@ -252,8 +258,9 @@ export default ConferenceScreen
 
 const Styles = StyleSheet.create({
   image: {
-    width: "auto",
-    height: 270,
+    width: "100%",
+    height: screenHeight * 0.3,
+    resizeMode: 'cover',
   },
   heading: {
     fontSize: 25,

@@ -250,28 +250,8 @@ const Login = () => {
             if (Response[0].Message == "Success") {
               // console.log("Login", Response)
               // console.log("Login true =============")
-              if (Platform.OS == "web") {
-                if ((Response[0].IsAdmin) == "true") {
-                  alert("Admin Login!");
-                  setUser_email(email)
-                  console.log("Admin Login from DB : ", Response[0].IsAdmin);
-                  navigation.navigate('WebAdminTab', {
-                    screen: 'HomeScreen',
-                  });
-                  setIsAdmin(Response[0].IsAdmin);
-                  // storeCredentials()
-                }
-                else {
-                  alert(Response[0].Message);
-                  setUser_email(email)
-                  navigation.navigate('Web_Tabs', {
-                    screen: 'HomeScreen',
-                  });
-                }
-              }
-              else {
-                storeCredentials()
-              }
+
+              storeCredentials()
             }
             else {
               alert(Response[0].Message);

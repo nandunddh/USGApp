@@ -1,10 +1,11 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Button, FlatList, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { DB_URL } from '../Constants/Constants';
 import ImagePick from './ImagePick';
 import MyContext from '../MyContext';
+import ImageUploader from './ImageUploader';
 
 
 const AddConference = ({ navigation }) => {
@@ -25,7 +26,7 @@ const AddConference = ({ navigation }) => {
   const [logo, setLogo] = useState(null);
   const [token, setToken] = useState();
 
-  const {Logo_path, setLogo_path} = useContext(MyContext);
+  const { Logo_path, setLogo_path } = useContext(MyContext);
 
   const name1 = useRef();
   const email1 = useRef();
@@ -130,77 +131,141 @@ const AddConference = ({ navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <ScrollView>
-        <View style={{ paddingHorizontal: 20, flex: 1, paddingVertical: 20, backgroundColor: "#fff" }}>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference name' clearTextOnFocus={false} defaultValue={name} onChangeText={name => setName(name)} ref={name1} />
+      {
+        Platform.OS == "web" ?
+          <ScrollView>
+            <View style={{ paddingHorizontal: 20, flex: 1, paddingVertical: 20, backgroundColor: "#fff" }}>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference name' clearTextOnFocus={false} defaultValue={name} onChangeText={name => setName(name)} ref={name1} />
 
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference year' clearTextOnFocus={false}
-              defaultValue={year} onChangeText={year => setYear(year)} ref={year1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference year' clearTextOnFocus={false}
+                  defaultValue={year} onChangeText={year => setYear(year)} ref={year1} />
 
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference email' clearTextOnFocus={false}
-              defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference email' clearTextOnFocus={false}
+                  defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
 
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference phone' clearTextOnFocus={false}
-              defaultValue={phone} onChangeText={phone => setPhone(phone)} ref={phone1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference phone' clearTextOnFocus={false}
+                  defaultValue={phone} onChangeText={phone => setPhone(phone)} ref={phone1} />
 
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference URL' clearTextOnFocus={true} defaultValue={url} onChangeText={url => setUrl(url)} ref={url1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference venu' clearTextOnFocus={true} defaultValue={venu} onChangeText={venu => setVenu(venu)} ref={venu1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference month' clearTextOnFocus={true} defaultValue={month} onChangeText={month => setMonth(month)} ref={month1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder="Type conference date's" clearTextOnFocus={true} defaultValue={dates} onChangeText={dates => setDates(dates)} ref={dates1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference hottel address' clearTextOnFocus={true} defaultValue={hoteladdress} onChangeText={hoteladdress => setHoteladdress(hoteladdress)} ref={hoteladdress1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference about' clearTextOnFocus={true} defaultValue={about} onChangeText={about => setAbout(about)} ref={about1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference about in short' clearTextOnFocus={true} defaultValue={aboutshort} onChangeText={aboutshort => setAboutshort(aboutshort)} ref={aboutshort1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference latitude' clearTextOnFocus={true} defaultValue={latitude} onChangeText={latitude => setLatitude(latitude)} ref={latitude1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Type conference longitude' clearTextOnFocus={true} defaultValue={longitude} onChangeText={longitude => setLongitude(longitude)} ref={longitude1} />
-          </View>
-          <View style={styles.inputbox}>
-            <TextInput style={styles.textinput} placeholder='Category Type' clearTextOnFocus={true} defaultValue={token} onChangeText={token => setToken(token)} ref={token1} />
-          </View>
-          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 20 }}>
-            <Button title="Photo Library" onPress={() => selectImage(true)} />
-            <Button title="Capture Image" onPress={() => selectImage(false)} />
-          </View> */}
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference URL' clearTextOnFocus={true} defaultValue={url} onChangeText={url => setUrl(url)} ref={url1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference venu' clearTextOnFocus={true} defaultValue={venu} onChangeText={venu => setVenu(venu)} ref={venu1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference month' clearTextOnFocus={true} defaultValue={month} onChangeText={month => setMonth(month)} ref={month1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder="Type conference date's" clearTextOnFocus={true} defaultValue={dates} onChangeText={dates => setDates(dates)} ref={dates1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference hottel address' clearTextOnFocus={true} defaultValue={hoteladdress} onChangeText={hoteladdress => setHoteladdress(hoteladdress)} ref={hoteladdress1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference about' clearTextOnFocus={true} defaultValue={about} onChangeText={about => setAbout(about)} ref={about1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference about in short' clearTextOnFocus={true} defaultValue={aboutshort} onChangeText={aboutshort => setAboutshort(aboutshort)} ref={aboutshort1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference latitude' clearTextOnFocus={true} defaultValue={latitude} onChangeText={latitude => setLatitude(latitude)} ref={latitude1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference longitude' clearTextOnFocus={true} defaultValue={longitude} onChangeText={longitude => setLongitude(longitude)} ref={longitude1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Category Type' clearTextOnFocus={true} defaultValue={token} onChangeText={token => setToken(token)} ref={token1} />
+              </View>
+              <ImageUploader />
+              <View style={{ marginTop: 25, marginBottom: 40 }}>
+                <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleCreate}>
+                  <Text style={{ color: "#fff", textAlign: "center" }}> Create </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+          :
+          <ScrollView>
+            <View style={{ paddingHorizontal: 20, flex: 1, paddingVertical: 20, backgroundColor: "#fff" }}>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference name' clearTextOnFocus={false} defaultValue={name} onChangeText={name => setName(name)} ref={name1} />
 
-          {/* <SelectList
-            setSelected={(val) => setname(val)}
-            data={conferencenames}
-            save="value"
-            placeholder="Select Category"
-            defaultValue={name} onChangeText={name => setEmail(name)} ref={name1}
-          /> */}
-          <ImagePick />
-          <View style={{ marginTop: 25, marginBottom: 40 }}>
-            <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleCreate}>
-              <Text style={{ color: "#fff", textAlign: "center" }}> Create </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference year' clearTextOnFocus={false}
+                  defaultValue={year} onChangeText={year => setYear(year)} ref={year1} />
+
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference email' clearTextOnFocus={false}
+                  defaultValue={email} onChangeText={email => setEmail(email)} ref={email1} />
+
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference phone' clearTextOnFocus={false}
+                  defaultValue={phone} onChangeText={phone => setPhone(phone)} ref={phone1} />
+
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference URL' clearTextOnFocus={true} defaultValue={url} onChangeText={url => setUrl(url)} ref={url1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference venu' clearTextOnFocus={true} defaultValue={venu} onChangeText={venu => setVenu(venu)} ref={venu1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference month' clearTextOnFocus={true} defaultValue={month} onChangeText={month => setMonth(month)} ref={month1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder="Type conference date's" clearTextOnFocus={true} defaultValue={dates} onChangeText={dates => setDates(dates)} ref={dates1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference hottel address' clearTextOnFocus={true} defaultValue={hoteladdress} onChangeText={hoteladdress => setHoteladdress(hoteladdress)} ref={hoteladdress1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference about' clearTextOnFocus={true} defaultValue={about} onChangeText={about => setAbout(about)} ref={about1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference about in short' clearTextOnFocus={true} defaultValue={aboutshort} onChangeText={aboutshort => setAboutshort(aboutshort)} ref={aboutshort1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference latitude' clearTextOnFocus={true} defaultValue={latitude} onChangeText={latitude => setLatitude(latitude)} ref={latitude1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Type conference longitude' clearTextOnFocus={true} defaultValue={longitude} onChangeText={longitude => setLongitude(longitude)} ref={longitude1} />
+              </View>
+              <View style={styles.inputbox}>
+                <TextInput style={styles.textinput} placeholder='Category Type' clearTextOnFocus={true} defaultValue={token} onChangeText={token => setToken(token)} ref={token1} />
+              </View>
+                  {/* <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 20 }}>
+                <Button title="Photo Library" onPress={() => selectImage(true)} />
+                <Button title="Capture Image" onPress={() => selectImage(false)} />
+                </View> */}
+
+              {/* <SelectList
+                setSelected={(val) => setname(val)}
+                data={conferencenames}
+                save="value"
+                placeholder="Select Category"
+                defaultValue={name} onChangeText={name => setEmail(name)} ref={name1}
+              /> */}
+              <ImagePick />
+              <View style={{ marginTop: 25, marginBottom: 40 }}>
+                <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} onPress={handleCreate}>
+                  <Text style={{ color: "#fff", textAlign: "center" }}> Create </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+
+      }
     </SafeAreaProvider>
   )
 }
