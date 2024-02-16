@@ -110,79 +110,155 @@ const SignUp = ({ navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <ScrollView>
-        <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
-          <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
-          <View style={styles.inputbox}>
-            <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
-            <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={name => setName(name)} ref={name1} defaultValue={name} />
-            {/* <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1}/> */}
+      {Platform.OS == "web" ?
+        <ScrollView>
+          <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20, alignSelf: "center" }}>
+            <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
+            <View style={styles.inputbox}>
+              <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+              <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={name => setName(name)} ref={name1} defaultValue={name} />
+              {/* <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1}/> */}
 
-          </View>
-          <View style={styles.inputbox}>
-            <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
-            <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1} defaultValue={email} />
-
-          </View>
-          <View style={styles.inputbox}>
-            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
-            <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} onChangeText={password => setPassword(password)} ref={password1} defaultValue={password} />
-            {hidePass ?
-              <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
-              :
-              <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
-
-            }
-
-          </View>
-          <View style={styles.inputbox}>
-            <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
-            <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={true} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
-            {confhidePass ?
-              <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
-              :
-              <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
-
-            }
-
-          </View>
-          <View style={{ marginTop: 25, marginBottom: 40 }}>
-            <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} >
-              <Text style={{ color: "#fff", textAlign: "center" }} onPress={InsertRecord}> SIGN IN </Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <View style={styles.container}>
-              <View style={styles.horizontalLine} />
-              <Text style={styles.text}> or continue with </Text>
-              <View style={styles.horizontalLine} />
             </View>
-            <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 40, marginBottom: 50 }}>
-              <View style={styles.logos}>
-                <FontAwesome5 name="facebook" size={34} color="#1876f2" />
-              </View>
-              <View style={styles.logos}>
-                <FontAwesome name="google" size={34} color="black" onPress={() => promtAsync()} />
-              </View>
-              <View style={styles.logos}>
-                <Fontisto name="apple" size={34} color="black" />
-              </View>
+            <View style={styles.inputbox}>
+              <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
+              <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1} defaultValue={email} />
+
+            </View>
+            <View style={styles.inputbox}>
+              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+              <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} onChangeText={password => setPassword(password)} ref={password1} defaultValue={password} />
+              {hidePass ?
+                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+                :
+                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+
+              }
+
+            </View>
+            <View style={styles.inputbox}>
+              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
+              <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={true} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
+              {confhidePass ?
+                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+                :
+                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+
+              }
+
+            </View>
+            <View style={{ marginTop: 25, marginBottom: 40 }}>
+              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} >
+                <Text style={{ color: "#fff", textAlign: "center" }} onPress={InsertRecord}> SIGN IN </Text>
+              </TouchableOpacity>
             </View>
             <View>
-              <Text style={{ textAlign: "center", fontSize: 15 }}> Already have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
-                navigation.navigate('Sign_in')
-              }> Sign In </Text></Text>
-            </View>
-            {/* <Button
+              <View style={styles.container}>
+                <View style={styles.horizontalLine} />
+                <Text style={styles.text}> or continue with </Text>
+                <View style={styles.horizontalLine} />
+              </View>
+              <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 40, marginBottom: 50 }}>
+                <View style={styles.logos}>
+                  <FontAwesome5 name="facebook" size={34} color="#1876f2" />
+                </View>
+                <View style={styles.logos}>
+                  <FontAwesome name="google" size={34} color="black" onPress={() => promtAsync()} />
+                </View>
+                <View style={styles.logos}>
+                  <Fontisto name="apple" size={34} color="black" />
+                </View>
+              </View>
+              <View>
+                <Text style={{ textAlign: "center", fontSize: 15 }}> Already have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
+                  navigation.navigate('Sign_in')
+                }> Sign In </Text></Text>
+              </View>
+              {/* <Button
                 onPress={() => {
                   AsyncStorage.removeItem('@user')
                 }}
                 title="Remove item"
                 color="red"
               /> */}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+        :
+        <ScrollView>
+          <View style={{ paddingHorizontal: 20, flex: 1, marginBottom: 20 }}>
+            <Text style={{ marginVertical: 20 }}>Create account and enjoy all services</Text>
+            <View style={styles.inputbox}>
+              <MaterialCommunityIcons name="account-outline" size={34} color="#000" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+              <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={name => setName(name)} ref={name1} defaultValue={name} />
+              {/* <TextInput style={styles.textinput} placeholder='Type your full name' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1}/> */}
+
+            </View>
+            <View style={styles.inputbox}>
+              <MaterialCommunityIcons name="email-outline" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", justifyContent: "flex-end" }} />
+              <TextInput style={styles.textinput} placeholder='Type your email' clearTextOnFocus={false} onChangeText={email => setEmail(email)} ref={email1} defaultValue={email} />
+
+            </View>
+            <View style={styles.inputbox}>
+              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", }} />
+              <TextInput style={styles.textinput} placeholder='Type your password' clearTextOnFocus={true} secureTextEntry={hidePass ? true : false} onChangeText={password => setPassword(password)} ref={password1} defaultValue={password} />
+              {hidePass ?
+                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+                :
+                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setHidePass(!hidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+
+              }
+
+            </View>
+            <View style={styles.inputbox}>
+              <Feather name="lock" size={30} color="black" style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", flex: 1 }} />
+              <TextInput style={styles.textinput} placeholder='Type your confirm password' clearTextOnFocus={true} secureTextEntry={confhidePass ? true : false} onChangeText={confirmPw => setConfirmPw(confirmPw)} ref={cnpassword1} defaultValue={confirmPw} />
+              {confhidePass ?
+                <AntDesign name="eye" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+                :
+                <Entypo name="eye-with-line" size={25} color="black" autoCorrect={false} onPress={() => setConfHidePass(!confhidePass)} style={{ marginRight: 15, marginLeft: 15, alignSelf: "center", marginEnd: 10 }} />
+
+              }
+
+            </View>
+            <View style={{ marginTop: 25, marginBottom: 40 }}>
+              <TouchableOpacity style={{ borderRadius: 10, backgroundColor: "#363942", paddingVertical: 22 }} >
+                <Text style={{ color: "#fff", textAlign: "center" }} onPress={InsertRecord}> SIGN IN </Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <View style={styles.container}>
+                <View style={styles.horizontalLine} />
+                <Text style={styles.text}> or continue with </Text>
+                <View style={styles.horizontalLine} />
+              </View>
+              <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 40, marginBottom: 50 }}>
+                <View style={styles.logos}>
+                  <FontAwesome5 name="facebook" size={34} color="#1876f2" />
+                </View>
+                <View style={styles.logos}>
+                  <FontAwesome name="google" size={34} color="black" onPress={() => promtAsync()} />
+                </View>
+                <View style={styles.logos}>
+                  <Fontisto name="apple" size={34} color="black" />
+                </View>
+              </View>
+              <View>
+                <Text style={{ textAlign: "center", fontSize: 15 }}> Already have an account? <Text style={{ color: "#ff6500" }} onPress={() =>
+                  navigation.navigate('Sign_in')
+                }> Sign In </Text></Text>
+              </View>
+              {/* <Button
+                onPress={() => {
+                  AsyncStorage.removeItem('@user')
+                }}
+                title="Remove item"
+                color="red"
+              /> */}
+            </View>
+          </View>
+        </ScrollView>
+      }
     </SafeAreaProvider>
   )
 }

@@ -38,18 +38,7 @@ const Login = () => {
   const password1 = useRef();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [data, setData] = useState({
-  //   email: "",
-  //   password: "",
-  // });
-  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email } = useContext(MyContext)
-
-  // const handleChange = (event = {}) => {
-  //   const name = event.target && event.target.name;
-  //   const value = event.target && event.target.value;
-
-  //   setData({ [name]: value });
-  // }
+  const { isLogin, setIsLogin, setIsAdmin, isAdmin, setStoredCredentials, storedCredentials, user_email, setUser_email, user_name, setUser_name } = useContext(MyContext)
 
   const [request, response, promtAsync] = Google.useAuthRequest({
     androidClientId:
@@ -65,15 +54,46 @@ const Login = () => {
     if (response?.type === 'success') {
       handleSignInWithGoogle();
     }
-    // console.log("Data = ", response);
-    // if(email !== ""){
-    //   handleLogin()
-    // }
-    // SplashScreen.hide();
-
     getStoredCredentials();
     console.log("isLogin from login === ", isAdmin)
-  }, [response, isLogin, isAdmin, email, storedCredentials])
+  
+  }, [response, isLogin, isAdmin, email, storedCredentials, user_name])
+
+  const getStoredCredentials = async () => {
+    try {
+      const storedEmail = await SecureStore.getItemAsync('email');
+      const storedPassword = await SecureStore.getItemAsync('password');
+      const username = await SecureStore.getItemAsync('username');
+      if (storedEmail && storedPassword) {
+        // alert(username + " username");
+        await setStoredCredentials({ email: storedEmail, password: storedPassword, username: username });
+        if (storedEmail === "admin@test.com") {
+          // navigation.navigate('HomeScreen');
+          navigation.navigate('AdminTab', {
+            screen: 'HomeScreen',
+          });
+        }
+        else {
+          navigation.navigate('UserTab', {
+            screen: 'HomeScreen',
+          });
+        }
+      
+        // setIsLogin(true);
+        // if (storedisAdmin === "true") {
+        //   setIsAdmin(true);
+        // }
+        // {storeCredentials && 
+        // navigation.navigate("") }
+
+        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
+      } else {
+        console.log('No credentials found.');
+      }
+    } catch (error) {
+      console.error('Error retrieving credentials:', error);
+    }
+  }
 
   // async function handleSignInWithGoogle() {
   //   const user = await AsyncStorage.getItem('@user')
@@ -113,100 +133,30 @@ const Login = () => {
 
   // const insets = useSafeAreaInsets()
 
-  // const login = () => {
-  //   setIsLogin(true)
-  //   if (email === "nandu@admin.com") {
-  //     setIsAdmin(true)
-  //   }
-  // }
-  // const handleLogin = () => {
-  //   if ((email.length == 0) || (password.length == 0)) {
-  //     alert("Required Field Is Missing!!!");
-  //   } else {
-  //     var APIURL = "http://127.0.0.1:8000/login.php";
-
-  //     var headers = {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     };
-
-  //     var Data = {
-  //       Email: email,
-  //       Password: password
-  //     };
-
-  //     fetch(APIURL, {
-  //       method: 'POST',
-  //       headers: headers,
-  //       body: JSON.stringify(Data)
-  //     })
-  //       .then((Response) => Response.json())
-  //       .then((Response) => {
-  //         alert(Response[0].Message)
-  //         if (Response[0].Message == "Success") {
-  //           console.log("true")
-  //           login()
-  //           // navigation.navigate("HomeScreen");
-  //         }
-  //         console.log(Data);
-  //       })
-  //       .catch((error) => {
-  //         console.error("ERROR FOUND" + error);
-  //       })
-  //   }
-
-
-  // }
-
-  const getStoredCredentials = async () => {
-    try {
-      const storedEmail = await SecureStore.getItemAsync('email');
-      const storedPassword = await SecureStore.getItemAsync('password');
-      // const storedisAdmin = await SecureStore.getItemAsync('isAdmin');
-      if (storedEmail && storedPassword) {
-        setStoredCredentials({ email: storedEmail, password: storedPassword });
-        if (storedEmail === "nandu@test.com") {
-          // navigation.navigate('HomeScreen');
-          navigation.navigate('UserTab', {
-            screen: 'HomeScreen',
-          });
-        }
-        else if (storedEmail === "admin@test.com") {
-          navigation.navigate('AdminTab', {
-            screen: 'HomeScreen',
-          });
-        }
-        // setIsLogin(true);
-        // if (storedisAdmin === "true") {
-        //   setIsAdmin(true);
-        // }
-        // {storeCredentials && 
-        // navigation.navigate("") }
-
-        console.log('Stored Credentials Login Screen:', { email: storedEmail, password: storedPassword });
-      } else {
-        console.log('No credentials found.');
-      }
-    } catch (error) {
-      console.error('Error retrieving credentials:', error);
-    }
-  }
   // Function to store credentials
   const storeCredentials = async () => {
     try {
       const emailString = String(email);
       const passwordString = String(password);
-      // const isAdminString = String(isAdmin);
+      const username = String(user_name);
       await SecureStore.setItemAsync('email', emailString);
       await SecureStore.setItemAsync('password', passwordString);
-      // await SecureStore.setItemAsync('isAdmin', isAdminString);
+      await SecureStore.setItemAsync('username', username);
       // getStoredCredentials()
       // login()
-      navigation.navigate('UserTab', {
-        screen: 'HomeScreen',
-      });
+      if (email == "admin@test.com") {
+        navigation.navigate('AdminTab', {
+          screen: 'HomeScreen',
+        });
+
+      } else {
+        navigation.navigate('UserTab', {
+          screen: 'HomeScreen',
+        });
+      }
       // navigation.navigate("HomeScreen");
-      console.log('Credentials stored successfully. And Isadmin = ', isAdminString);
+      // alert("test1");
+      console.log('Credentials stored successfully');
     } catch (error) {
       console.error('Error storing credentials:', error);
     }
@@ -226,7 +176,6 @@ const Login = () => {
       try {
         // var APIURL = `http://localhost:8081/SERVER(backend)/login.php`;
         var APIURL = `${DB_URL}login.php`;
-        // var APIURL = "http://127.0.0.1:8000/USG/login.php";
 
         var headers = {
           'Accept': 'application/json',
@@ -245,13 +194,15 @@ const Login = () => {
           body: JSON.stringify(Data)
         })
           .then((Response) => Response.json())
-          .then((Response) => {
+          .then(async (Response) => {
             // console.log("Login ===", Response);
             if (Response[0].Message == "Success") {
               // console.log("Login", Response)
               // console.log("Login true =============")
+              await setUser_name(Response[0].User_Name)
 
-              storeCredentials()
+              await storeCredentials()
+              // alert(Response[0].User_Name);
             }
             else {
               alert(Response[0].Message);

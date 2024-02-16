@@ -22,7 +22,7 @@ const WebTabs = () => {
               <Image source={require("../../../assets/favicon.png")} style={{ borderRadius: 25, marginLeft: 10 }} />
             </View>
             <View style={{ marginLeft: 15 }}>
-              <Text style={{ color: "#fff" }}> Hi Welcome </Text>
+              <Text style={{ color: "#fff" }}> Hi Welcome WebTabs </Text>
               <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>{user_email}</Text>
             </View>
           </View>

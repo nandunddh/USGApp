@@ -7,11 +7,25 @@ import { Image, Platform, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import ImageUpload from '../ImageUpload'
 import Conf_update from '../AdminScreens/Conf_update'
+import Profile from './Profile'
+import CurrentConferences from '../Screen/CurrentConferences'
+import { useContext } from 'react'
+import MyContext from '../MyContext'
+import Logout from '../Auth/Logout'
+import { useEffect } from 'react'
+import * as SecureStore from 'expo-secure-store';
 
 const Tab = createBottomTabNavigator()
 
 
 const UserTabs = () => {
+  const { storedCredentials } = useContext(MyContext);
+
+  useEffect(() => {
+    // alert(JSON.stringify(storedCredentials));
+    // getStoredCredentials()
+  }, [storedCredentials])
+  
   const profile = () => {
     return (
       <SafeAreaProvider style={{ backgroundColor: "#373a43", height: 90, width: "auto", borderBottomColor: "#373a43 !important", paddingTop: 5 }}>
@@ -22,7 +36,12 @@ const UserTabs = () => {
             </View>
             <View style={{ marginLeft: 15 }}>
               <Text style={{ color: "#fff" }}> Hi Welcome </Text>
-              <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}> Nandu kumar </Text>
+              {
+                storedCredentials ?
+                  <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>{storedCredentials.username}</Text>
+                  :
+                  <Text style={{ fontWeight: "bold", fontSize: 18, color: "#fff" }}>No Name</Text>
+              }
             </View>
           </View>
         </View>
@@ -68,10 +87,10 @@ const UserTabs = () => {
             options={{
               headerTitle: null,
               title: " ",
-              headerShadowVisible: false,
-              headerLeft: () => (profile()), headerStyle: {
-                backgroundColor: "#373a43",
-              },
+              headerShown: false,
+              // headerLeft: () => (profile()), headerStyle: {
+              //   backgroundColor: "#373a43",
+              // },
               headerStyle: {
                 backgroundColor: "#373a43"
               }
@@ -89,8 +108,20 @@ const UserTabs = () => {
             }}
           />
           <Tab.Screen
-            name="Conf_update"
-            component={Conf_update}
+            name="CurrentConferences"
+            component={CurrentConferences}
+            options={{
+              headerTitleAlign: "center",
+              headerShadowVisible: false
+              // headerShown: false,
+
+
+            }}
+          />
+
+          <Tab.Screen
+            name="Profile"
+            component={Profile}
             options={{
               headerTitleAlign: "center",
               headerShadowVisible: false
@@ -100,19 +131,8 @@ const UserTabs = () => {
             }}
           />
           <Tab.Screen
-            name="CreateConference"
-            component={AddConference}
-            options={{
-              headerTitleAlign: "center",
-              headerShadowVisible: false
-              // headerShown: false,
-
-
-            }}
-          />
-          <Tab.Screen
-            name="List"
-            component={ConferencesList}
+            name="Logout"
+            component={Logout}
             options={{
               headerTitleAlign: "center",
               headerShadowVisible: false

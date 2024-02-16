@@ -1,21 +1,39 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import Pdf from 'react-native-pdf';
+import React from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { PDFView } from 'react-native-pdf';
 
-const pdf = () => {
+const Pdf = () => {
+  const source = { uri: 'https://catalysis.unitedscientificgroup.org/pdfs/CCE-Program-2024.pdf', cache: true };
   return (
-    <View>
-      <Text>pdf</Text>
-      {/* <Pdf
-        trustAllCerts={false}
-        source={PdfResource}
-        style={styles.pdf}
-        onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`number of pages: ${numberOfPages}`);
-        }}
-      /> */}
-    </View>
-  )
-}
+    <PDFView
+      source={source}
+      onLoadComplete={(numberOfPages, filePath) => {
+        console.log(`Number of pages: ${numberOfPages}`);
+      }}
+      onPageChanged={(page, numberOfPages) => {
+        console.log(`Current page: ${page}`);
+      }}
+      onError={(error) => {
+        console.log(error);
+      }}
+      onPressLink={(uri) => {
+        console.log(`Link pressed: ${uri}`);
+      }}
+      style={styles.pdf}
+    />
+  );
+};
 
-export default pdf
+export default Pdf;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  }
+})
